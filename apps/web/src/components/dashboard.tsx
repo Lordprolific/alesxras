@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { WorkspaceSession } from "@/components/workspace-session";
 
 const requests = [
   { id: "PR-0248", title: "Regional logistics partner", category: "Logistics", bids: 4, budget: "12,000 NEAR", status: "Reviewing bids", kind: "review", updated: "12 min ago" },
@@ -54,7 +55,7 @@ export function Dashboard() {
       <section className="main-panel" id="overview">
         <header className="topbar">
           <div className="breadcrumb"><span>Northstar Supply</span><span className="breadcrumb-slash">/</span><strong>Overview</strong></div>
-          <div className="topbar-right"><span className="demo-label"><span />Sample workspace</span><span className="mini-avatar">AM</span></div>
+          <div className="topbar-right"><span className="demo-label"><span />Sample workspace</span><WorkspaceSession /><span className="mini-avatar">AM</span></div>
         </header>
 
         <div className="content-wrap">

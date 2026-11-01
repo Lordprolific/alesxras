@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --import ../../scripts/test-preload.mjs --import tsx --test src/lib/auth.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@alesxras/domain": "*",
+    "@near-wallet-selector/core": "10.1.4",
+    "@near-wallet-selector/my-near-wallet": "10.1.4",
     "next": "15.5.28",
     "react": "19.3.0",
     "react-dom": "19.3.0"
