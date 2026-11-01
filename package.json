@@ -1,0 +1,14 @@
+{
+  "name": "alesxras",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "predev": "npm run build --workspace @alesxras/domain",
+    "dev": "npm run dev --workspace @alesxras/web",
+    "build": "npm run build --workspace @alesxras/domain && npm run build --workspace @alesxras/agents && npm run build --workspace @alesxras/near && npm run build --workspace @alesxras/worker && npm run build --workspace @alesxras/web",
+    "lint": "npm run lint --workspace @alesxras/web && npm run lint --workspace @alesxras/domain && npm run lint --workspace @alesxras/agents && npm run lint --workspace @alesxras/near && npm run lint --workspace @alesxras/worker",
+    "test": "npm run test --workspace @alesxras/domain && npm run test --workspace @alesxras/agents && npm run test --workspace @alesxras/near && npm run test --workspace @alesxras/worker",
+    "typecheck": "npm run typecheck --workspace @alesxras/domain && npm run typecheck --workspace @alesxras/agents && npm run typecheck --workspace @alesxras/near && npm run typecheck --workspace @alesxras/worker && npm run typecheck --workspace @alesxras/web"
+  }
+}

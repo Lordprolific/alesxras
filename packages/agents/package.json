@@ -1,0 +1,16 @@
+{
+  "name": "@alesxras/agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "tsx --test src/**/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": { "@alesxras/domain": "*" },
+  "devDependencies": { "tsx": "^4.0.0", "typescript": "^5.0.0" }
+}
