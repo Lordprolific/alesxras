@@ -31,7 +31,7 @@ function NetworkArtwork() {
     <div className="art-node supplier-node"><span className="node-glyph">S</span><div><small>SUPPLIER</small><strong>Bid received</strong></div><i className="node-signal sage"/></div>
     <div className="art-node agent-node"><span className="node-glyph agent-glyph">A</span><div><small>AGENT</small><strong>Evidence mapped</strong></div><i className="node-signal blush"/></div>
     <div className="art-node record-node"><span className="record-mark">↗</span><div><small>SETTLEMENT</small><strong>NEAR testnet</strong></div></div>
-    <div className="art-caption"><span className="caption-live"/>Illustrative network · no live bids</div>
+    
   </div>;
 }
 
