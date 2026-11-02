@@ -59,12 +59,12 @@ export function Dashboard() {
         </header>
 
         <div className="content-wrap">
-          <div className="welcome-row">
+          <div className="welcome-row workspace-reveal">
             <div><p className="eyebrow">Procurement workspace</p><h1>Good morning, Alex</h1><p className="welcome-copy">Your procurement desk is moving. Here’s what needs your attention.</p></div>
             <a className="create-button" href="#create-request"><span aria-hidden="true">＋</span>New request</a>
           </div>
 
-          <section className="signal-grid" aria-label="Workspace summary">
+          <section className="signal-grid workspace-reveal" aria-label="Workspace summary">
             <article className="signal-card"><div className="signal-label">Open requests <span className="signal-mark">↗</span></div><div className="signal-value">08</div><div className="signal-foot"><span className="trend-up">+2</span>started this week</div><div className="sparkline" aria-hidden="true"><svg viewBox="0 0 120 40"><path d="M2 31 17 26 29 29 42 15 56 20 70 11 82 18 96 8 118 4" /></svg></div></article>
             <article className="signal-card"><div className="signal-label">Awaiting your approval <span className="signal-mark">⌁</span></div><div className="signal-value">02</div><div className="signal-foot"><span className="trend-note">One is time-sensitive</span></div><div className="signal-rail"><span /></div></article>
             <article className="signal-card"><div className="signal-label">Committed this month <span className="signal-mark">◈</span></div><div className="signal-value compact">24,650 <small>NEAR</small></div><div className="signal-foot">Across 5 approved requests</div><div className="bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div></article>
@@ -72,7 +72,7 @@ export function Dashboard() {
           </section>
 
           <div className="section-heading" id="requests"><div><h2>In motion</h2><p>Requests that need a decision or are progressing now.</p></div><a className="text-link" href="#all-requests">View all requests <span>↗</span></a></div>
-          <section className="request-list" aria-label="Sample procurement requests">
+          <section className="request-list workspace-reveal" aria-label="Sample procurement requests">
             <div className="request-head"><span>Request</span><span>Supplier bids</span><span>Budget</span><span>Status</span><span>Updated</span><span /></div>
             {requests.map((request) => <article className="request-row" key={request.id}>
               <div className="request-main"><span className="request-id">{request.id}</span><strong>{request.title}</strong><span className="category">{request.category}</span></div>
@@ -85,12 +85,12 @@ export function Dashboard() {
           </section>
 
           <div className="lower-grid">
-            <section className="activity-panel" id="activity">
+            <section className="activity-panel workspace-reveal" id="activity">
               <div className="panel-heading"><div><h2>Recent activity</h2><p>Actions across your workspace</p></div></div>
               <div className="activity-list">{activity.map((item) => <div className="activity-item" key={item.title}><span className="activity-marker">{item.icon}</span><div className="activity-copy"><strong>{item.title}</strong><span>{item.detail}</span></div><time>{item.time}</time></div>)}</div>
               <a className="activity-link" href="#activity-log">Open activity log <span>↗</span></a>
             </section>
-            <section className="approval-panel" id="approvals">
+            <section className="approval-panel workspace-reveal" id="approvals">
               <div className="panel-heading"><div><h2>Needs your decision</h2><p>Human approval before execution</p></div><span className="approval-total">02</span></div>
               <div className="approval-feature"><div className="approval-topline"><span className="status-pill approval"><i />Ready to approve</span><span className="approval-date">Due in 4h</span></div><h3>Secure document storage</h3><p>Recommended supplier <strong>Verity Systems</strong></p><div className="approval-amount"><span>Proposed amount</span><strong>4,800 <small>NEAR</small></strong></div><div className="approval-actions"><a href="#review-approval" className="review-button">Review decision</a></div></div>
               <p className="approval-footnote"><span>◎</span>Funds move only after you approve.</p>
