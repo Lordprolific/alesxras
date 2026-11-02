@@ -8,7 +8,7 @@ const requests = [
 ];
 
 const activity = [
-  { icon: "↗", title: "New bid received", detail: "Regional logistics partner · Bid 04", time: "12 min" },
+  { icon: "•", title: "New bid received", detail: "Regional logistics partner · Bid 04", time: "12 min" },
   { icon: "✓", title: "Evaluation completed", detail: "Secure document storage · 3 suppliers", time: "38 min" },
   { icon: "◌", title: "Negotiation round opened", detail: "Field equipment batch 02 · Round 2", time: "1 hr" },
 ];
@@ -65,13 +65,13 @@ export function Dashboard() {
           </div>
 
           <section className="signal-grid workspace-reveal" aria-label="Workspace summary">
-            <article className="signal-card"><div className="signal-label">Open requests <span className="signal-mark">↗</span></div><div className="signal-value">08</div><div className="signal-foot"><span className="trend-up">+2</span>started this week</div><div className="sparkline" aria-hidden="true"><svg viewBox="0 0 120 40"><path d="M2 31 17 26 29 29 42 15 56 20 70 11 82 18 96 8 118 4" /></svg></div></article>
+            <article className="signal-card"><div className="signal-label">Open requests <span className="signal-mark"></span></div><div className="signal-value">08</div><div className="signal-foot"><span className="trend-up">+2</span>started this week</div><div className="sparkline" aria-hidden="true"><svg viewBox="0 0 120 40"><path d="M2 31 17 26 29 29 42 15 56 20 70 11 82 18 96 8 118 4" /></svg></div></article>
             <article className="signal-card"><div className="signal-label">Awaiting your approval <span className="signal-mark">⌁</span></div><div className="signal-value">02</div><div className="signal-foot"><span className="trend-note">One is time-sensitive</span></div><div className="signal-rail"><span /></div></article>
             <article className="signal-card"><div className="signal-label">Committed this month <span className="signal-mark">◈</span></div><div className="signal-value compact">24,650 <small>NEAR</small></div><div className="signal-foot">Across 5 approved requests</div><div className="bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div></article>
             <article className="signal-card network-signal"><div className="signal-label">Network <span className="signal-mark">◎</span></div><div className="network-status disconnected"><span className="network-dot pending" />Wallet not connected</div><div className="signal-foot">Testnet transactions are not enabled yet</div><div className="network-seal"><BrandMark className="brand-mark" /></div></article>
           </section>
 
-          <div className="section-heading" id="requests"><div><h2>In motion</h2><p>Requests that need a decision or are progressing now.</p></div><a className="text-link" href="#all-requests">View all requests <span>↗</span></a></div>
+          <div className="section-heading" id="requests"><div><h2>In motion</h2><p>Requests that need a decision or are progressing now.</p></div><a className="text-link" href="#all-requests">View all requests <span></span></a></div>
           <section className="request-list workspace-reveal" aria-label="Sample procurement requests">
             <div className="request-head"><span>Request</span><span>Supplier bids</span><span>Budget</span><span>Status</span><span>Updated</span><span /></div>
             {requests.map((request) => <article className="request-row" key={request.id}>
@@ -88,7 +88,7 @@ export function Dashboard() {
             <section className="activity-panel workspace-reveal" id="activity">
               <div className="panel-heading"><div><h2>Recent activity</h2><p>Actions across your workspace</p></div></div>
               <div className="activity-list">{activity.map((item) => <div className="activity-item" key={item.title}><span className="activity-marker">{item.icon}</span><div className="activity-copy"><strong>{item.title}</strong><span>{item.detail}</span></div><time>{item.time}</time></div>)}</div>
-              <a className="activity-link" href="#activity-log">Open activity log <span>↗</span></a>
+              <a className="activity-link" href="#activity-log">Open activity log <span></span></a>
             </section>
             <section className="approval-panel workspace-reveal" id="approvals">
               <div className="panel-heading"><div><h2>Needs your decision</h2><p>Human approval before execution</p></div><span className="approval-total">02</span></div>
