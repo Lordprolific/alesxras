@@ -71,7 +71,7 @@ export function Dashboard() {
             <article className="signal-card network-signal"><div className="signal-label">Network <span className="signal-mark">◎</span></div><div className="network-status disconnected"><span className="network-dot pending" />Wallet not connected</div><div className="signal-foot">Testnet transactions are not enabled yet</div><div className="network-seal"><BrandMark className="brand-mark" /></div></article>
           </section>
 
-          <div className="section-heading" id="requests"><div><h2>In motion</h2><p>Requests that need a decision or are progressing now.</p></div><a className="text-link" href="#all-requests">View all requests <span></span></a></div>
+          <div className="section-heading" id="requests"><div><h2>In motion</h2><p>Requests that need a decision or are progressing now.</p></div><a className="text-link" href="#all-requests">View all requests</a></div>
           <section className="request-list workspace-reveal" aria-label="Sample procurement requests">
             <div className="request-head"><span>Request</span><span>Supplier bids</span><span>Budget</span><span>Status</span><span>Updated</span><span /></div>
             {requests.map((request) => <article className="request-row" key={request.id}>
@@ -88,7 +88,7 @@ export function Dashboard() {
             <section className="activity-panel workspace-reveal" id="activity">
               <div className="panel-heading"><div><h2>Recent activity</h2><p>Actions across your workspace</p></div></div>
               <div className="activity-list">{activity.map((item) => <div className="activity-item" key={item.title}><span className="activity-marker">{item.icon}</span><div className="activity-copy"><strong>{item.title}</strong><span>{item.detail}</span></div><time>{item.time}</time></div>)}</div>
-              <a className="activity-link" href="#activity-log">Open activity log <span></span></a>
+              <a className="activity-link" href="#activity-log">Open activity log</a>
             </section>
             <section className="approval-panel workspace-reveal" id="approvals">
               <div className="panel-heading"><div><h2>Needs your decision</h2><p>Human approval before execution</p></div><span className="approval-total">02</span></div>
