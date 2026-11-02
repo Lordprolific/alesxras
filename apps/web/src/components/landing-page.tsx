@@ -26,11 +26,7 @@ function NetworkArtwork() {
       <circle className="pulse-dot pulse-b" r="4"><animateMotion dur="7.2s" begin="1s" repeatCount="indefinite" path="M110 294C202 294 183 428 302 428S380 280 494 280"/></circle>
       <circle className="pulse-dot pulse-c" r="3"><animateMotion dur="5.6s" begin="2.2s" repeatCount="indefinite" path="M275 126C340 126 331 280 494 280"/></circle>
     </svg>
-    <div className="art-center"><div className="center-halo"/><Mark light/><span>alesxras</span><small>procurement network</small></div>
-    <div className="art-node buyer-node"><span className="node-glyph">B</span><div><small>BUYER</small><strong>Request 2048</strong></div><i className="node-signal"/></div>
-    <div className="art-node supplier-node"><span className="node-glyph">S</span><div><small>SUPPLIER</small><strong>Bid received</strong></div><i className="node-signal sage"/></div>
-    <div className="art-node agent-node"><span className="node-glyph agent-glyph">A</span><div><small>AGENT</small><strong>Evidence mapped</strong></div><i className="node-signal blush"/></div>
-    <div className="art-node record-node"><span className="record-mark"></span><div><small>SETTLEMENT</small><strong>NEAR testnet</strong></div></div>
+    <div className="art-center"><div className="center-halo"/><Mark light/><span>alesxras</span></div>
     
   </div>;
 }
