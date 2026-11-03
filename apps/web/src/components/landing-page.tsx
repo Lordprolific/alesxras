@@ -125,27 +125,21 @@ export function LandingPage() {
 
     <section className="intelligence-section" id="agent-evaluation">
       <div className="intelligence-head"><div><span className="section-index">04 / AGENT-ASSISTED, HUMAN-LED</span><h2>Useful intelligence.<br/><span>Bounded authority.</span></h2></div><p>Agents can organise evidence and surface rationale.<br/>People retain every consequential decision.</p></div>
-      <div className="intelligence-flow" aria-label="Evidence is evaluated by an agent and then passed to a buyer for human review">
-        <svg className="intelligence-connectors" viewBox="0 0 1000 250" preserveAspectRatio="none" aria-hidden="true">
-          <defs><linearGradient id="workflow-line" x1="0" x2="1"><stop offset="0" stopColor="#F7A8C4"/><stop offset=".52" stopColor="#C58BA5"/><stop offset="1" stopColor="#F7A8C4"/></linearGradient><filter id="workflow-glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-          <path className="workflow-track" d="M300 124H350 M650 124H700" />
-          <path className="workflow-active" d="M205 124H395 M605 124H795" />
-          <circle r="5" className="workflow-packet packet-one" filter="url(#workflow-glow)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M300 124H350"/></circle>
-          <circle r="5" className="workflow-packet packet-two" filter="url(#workflow-glow)"><animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" path="M650 124H700"/></circle>
-        </svg>
+      <div className="intelligence-flow" aria-label="Supplier evidence moves through agent evaluation before buyer review">
+        <div className="workflow-rail" aria-hidden="true"><span className="workflow-rail-base"/><span className="workflow-rail-progress"/><i className="workflow-pulse pulse-a"/><i className="workflow-pulse pulse-b"/></div>
         <article className="flow-stage evidence-source">
           <span className="flow-stage-index">01 / INPUT</span>
-          <span className="flow-symbol"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3.75h8l4 4V20.25H6zM14 3.75v4h4M9 12h6M9 15.5h6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
+          <div className="evidence-visual" aria-hidden="true"><span className="evidence-sheet sheet-back"/><span className="evidence-sheet sheet-front"><i/><i/><i/></span><span className="evidence-arrival"/></div>
           <strong>Supplier evidence</strong><small>Submitted materials</small><span className="flow-state"><i/> Received</span>
         </article>
         <article className="flow-stage agent-core">
           <span className="flow-stage-index">02 / ASSISTED EVALUATION</span>
-          <div className="agent-orbit-small"><span className="agent-spark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></span></div>
+          <div className="evaluation-visual" aria-hidden="true"><span className="evaluation-grid"/><span className="evaluation-scan"/><span className="evaluation-row row-one"/><span className="evaluation-row row-two"/><span className="evaluation-row row-three"/><span className="evaluation-cursor"/></div>
           <strong>Evaluation agent</strong><small>Criteria · evidence · rationale</small><span className="flow-state"><i/> Analysis support</span>
         </article>
         <article className="flow-stage recommendation">
           <span className="flow-stage-index">03 / HUMAN DECISION</span>
-          <span className="recommendation-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4L19 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
+          <div className="review-visual" aria-hidden="true"><span className="review-line line-one"/><span className="review-line line-two"/><span className="review-line line-three"/><span className="review-marker"/></div>
           <strong>Buyer review</strong><small>Recommendation presented</small><span className="flow-state"><i/> Awaiting a person</span>
         </article>
       </div>
