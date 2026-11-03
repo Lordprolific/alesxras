@@ -155,12 +155,28 @@ export function LandingPage() {
 
     <section className="participants-section"><div className="participants-intro"><span className="section-index">05 / A SHARED ENVIRONMENT</span><h2>Different roles.<br/>One considered process.</h2></div><article className="participant buyer-card"><div className="participant-top"><span className="participant-glyph buyer-glyph">B</span><span>01</span></div><h3>For buyers</h3><p>Shape a clear brief, compare submissions side by side, and keep approval in the hands of accountable people.</p><a href="#lifecycle">Buyer journey</a></article><article className="participant supplier-card"><div className="participant-top"><span className="participant-glyph supplier-glyph">S</span><span>02</span></div><h3>For suppliers</h3><p>Respond to a defined opportunity and take part in a structured process where submissions remain confidential.</p><a href="#lifecycle">Supplier journey</a></article></section>
 
-    <section className="near-section"><div className="near-left"><span className="section-index">06 / BUILT WITH NEAR IN MIND</span><h2>Coordination off-chain.<br/><span>Proof where it counts.</span></h2><p>Alesxras is designed for business transactions on NEAR. Supported chain interactions belong at the point of settlement and record | not as decoration on every step.</p><span className="network-warning"><i/>CURRENT EXPERIENCE: NEAR TESTNET</span></div><div className="near-graphic" aria-label="A procurement record prepared for a testnet transaction"><div className="near-disc disc-back"/><div className="near-disc disc-front"><Mark light/><span>NEAR</span></div><div className="chain-node cn-one"><span>01</span><strong>Buyer approval</strong></div><div className="chain-node cn-two"><span>02</span><strong>Signed action</strong></div><div className="chain-node cn-three"><span>03</span><strong>Receipt check</strong></div><svg viewBox="0 0 580 320" className="near-path" aria-hidden="true"><path d="M104 75C205 75 198 245 292 245s85-170 185-170"/><path d="M104 75C185 75 211 160 292 160s105-85 185-85"/><path d="M104 75H477"/></svg><span className="near-footnote">Testnet only · no real-money settlement</span></div></section>
+    <section className="near-section">
+      <div className="near-left"><span className="section-index">06 / BUILT WITH NEAR IN MIND</span><h2>Coordination off-chain.<br/><span>Proof where it counts.</span></h2><p>Alesxras is designed for business transactions on NEAR. Supported chain interactions belong at the point of settlement and record, not as decoration on every step.</p><span className="network-warning"><i/>CURRENT EXPERIENCE: NEAR TESTNET</span></div>
+      <div className="near-graphic" aria-label="Buyer approval, signed action and receipt check on NEAR testnet">
+        <div className="near-graphic-head"><span>SETTLEMENT SEQUENCE</span><span className="near-network-tag"><i/> NEAR TESTNET</span></div>
+        <div className="near-hub"><span className="near-hub-mark"><Mark light/></span><strong>NEAR</strong><small>Settlement layer</small></div>
+        <div className="near-sequence">
+          <article className="near-step"><span className="near-step-number">01</span><span className="near-step-icon">✓</span><strong>Buyer approval</strong><small>Human-authorised</small></article>
+          <span className="near-step-link"><i/></span>
+          <article className="near-step"><span className="near-step-number">02</span><span className="near-step-icon">↗</span><strong>Signed action</strong><small>Wallet-authorised</small></article>
+          <span className="near-step-link"><i/></span>
+          <article className="near-step"><span className="near-step-number">03</span><span className="near-step-icon">⌁</span><strong>Receipt check</strong><small>On-chain evidence</small></article>
+        </div>
+        <p className="near-footnote">Testnet only · no real-money settlement</p>
+      </div>
+    </section>
 
     <section className="approval-section" id="human-control">
-      <div className="approval-glyph" aria-hidden="true"><div className="approval-ring ring-one"/><div className="approval-ring ring-two"/><span>HUMAN<br/>GATE</span><i className="approval-signal"/></div>
-      <div className="approval-copy"><span className="section-index">07 / CONTROL THAT STAYS HUMAN</span><h2>Automation can move work.<br/><em>Only people move decisions.</em></h2><p>Agent assistance can narrow the search and explain a recommendation. A buyer still reviews the evidence and approves the supplier. Signing keys stay outside agents and web requests.</p></div>
-      <div className="approval-seal"><span>NO</span><strong>AUTO<br/>APPROVAL</strong><i className="seal-scan"/></div>
+      <div className="approval-copy"><span className="section-index">07 / CONTROL THAT STAYS HUMAN</span><h2>Automation can move work.<br/><em>Only people move decisions.</em></h2><p>Agent assistance can narrow the search and explain a recommendation. A buyer still reviews the evidence and approves the supplier. Signing keys stay outside agents and web requests.</p><div className="approval-principles"><span><i/>Human review remains mandatory</span><span><i/>Agents cannot approve or sign</span></div></div>
+      <div className="approval-visual" aria-label="Human approval is required; automatic approval is disabled">
+        <div className="approval-glyph"><div className="approval-ring ring-one"/><div className="approval-ring ring-two"/><span>HUMAN<br/>GATE</span><i className="approval-signal"/></div>
+        <div className="approval-seal"><span>NO</span><strong>AUTO<br/>APPROVAL</strong></div>
+      </div>
     </section>
 
     <section className="closing-section"><div className="closing-backdrop"/><Mark light/><p>Private by design. Human by decision.</p><h2>Make the next<br/>business decision<br/><em>move with trust.</em></h2><Link href="/launch" className="button-light">Launch app</Link><span className="closing-testnet"><i/>NEAR TESTNET EXPERIENCE</span></section>
