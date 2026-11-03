@@ -140,7 +140,7 @@ export function LandingPage() {
         </article>
         <article className="flow-stage agent-core">
           <span className="flow-stage-index">02 / ASSISTED EVALUATION</span>
-          <div className="agent-orbit-small"><span className="agent-spark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l1 2.5 2 1-2 1-1 2.5-1-2.5-2-1 2-1z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg></span></div>
+          <div className="agent-orbit-small"><span className="agent-spark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></span></div>
           <strong>Evaluation agent</strong><small>Criteria · evidence · rationale</small><span className="flow-state"><i/> Analysis support</span>
         </article>
         <article className="flow-stage recommendation">
@@ -161,11 +161,11 @@ export function LandingPage() {
         <div className="near-graphic-head"><span>SETTLEMENT SEQUENCE</span><span className="near-network-tag"><i/> NEAR TESTNET</span></div>
         <div className="near-hub"><span className="near-hub-mark"><Mark light/></span><strong>NEAR</strong><small>Settlement layer</small></div>
         <div className="near-sequence">
-          <article className="near-step"><span className="near-step-number">01</span><span className="near-step-icon">✓</span><strong>Buyer approval</strong><small>Human-authorised</small></article>
+          <article className="near-step"><span className="near-step-number">01</span><span className="near-step-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.2 4L19 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span><strong>Buyer approval</strong><small>Human-authorised</small></article>
           <span className="near-step-link"><i/></span>
-          <article className="near-step"><span className="near-step-number">02</span><span className="near-step-icon">↗</span><strong>Signed action</strong><small>Wallet-authorised</small></article>
+          <article className="near-step"><span className="near-step-number">02</span><span className="near-step-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span><strong>Signed action</strong><small>Wallet-authorised</small></article>
           <span className="near-step-link"><i/></span>
-          <article className="near-step"><span className="near-step-number">03</span><span className="near-step-icon">⌁</span><strong>Receipt check</strong><small>On-chain evidence</small></article>
+          <article className="near-step"><span className="near-step-number">03</span><span className="near-step-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 4.5h8l4 4v11H6zM14 4.5v4h4M9 13h6M9 16h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></span><strong>Receipt check</strong><small>On-chain evidence</small></article>
         </div>
         <p className="near-footnote">Testnet only · no real-money settlement</p>
       </div>
@@ -174,7 +174,7 @@ export function LandingPage() {
     <section className="approval-section" id="human-control">
       <div className="approval-copy"><span className="section-index">07 / CONTROL THAT STAYS HUMAN</span><h2>Automation can move work.<br/><em>Only people move decisions.</em></h2><p>Agent assistance can narrow the search and explain a recommendation. A buyer still reviews the evidence and approves the supplier. Signing keys stay outside agents and web requests.</p><div className="approval-principles"><span><i/>Human review remains mandatory</span><span><i/>Agents cannot approve or sign</span></div></div>
       <div className="approval-visual" aria-label="Human approval is required; automatic approval is disabled">
-        <div className="approval-glyph"><div className="approval-ring ring-one"/><div className="approval-ring ring-two"/><span>HUMAN<br/>GATE</span><i className="approval-signal"/></div>
+        <div className="approval-glyph"><div className="approval-ring ring-one"/><div className="approval-ring ring-two"/><span>BUYER<br/>REVIEW</span><i className="approval-signal"/></div>
         <div className="approval-seal"><span>NO</span><strong>AUTO<br/>APPROVAL</strong></div>
       </div>
     </section>
