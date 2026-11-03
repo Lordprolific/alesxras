@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import Link from "next/link";
 
 const stages = [
@@ -18,7 +18,20 @@ function Mark({ light = false }: { light?: boolean }) {
 }
 
 function NetworkArtwork() {
-  return <div className="network-art" aria-label="Animated illustration of buyers, suppliers and agents coordinating a procurement request" role="img">
+  const artRef = useRef<HTMLDivElement>(null);
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    event.currentTarget.style.setProperty("--pointer-x", String(x));
+    event.currentTarget.style.setProperty("--pointer-y", String(y));
+  };
+  const resetPointer = () => {
+    artRef.current?.style.setProperty("--pointer-x", "0");
+    artRef.current?.style.setProperty("--pointer-y", "0");
+  };
+  return <div ref={artRef} onPointerMove={handlePointerMove} onPointerLeave={resetPointer} className="network-art" aria-label="Animated illustration of buyers, suppliers and agents coordinating a procurement request" role="img">
     <div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/><div className="art-orbit orbit-three"/>
     <svg className="art-lines" viewBox="0 0 660 560" fill="none" aria-hidden="true">
       <path className="flow flow-one" d="M104 294C174 294 157 126 275 126S380 280 494 280"/><path className="flow flow-two" d="M110 294C202 294 183 428 302 428S380 280 494 280"/><path className="flow flow-three" d="M275 126C340 126 331 280 494 280M302 428C365 428 356 280 494 280"/><path className="flow fine" d="M104 294H494"/>
@@ -33,8 +46,9 @@ function NetworkArtwork() {
 
 function LifecycleDemo() {
   const [active, setActive] = useState(0);
+  const touchStart = useRef<number | null>(null);
   const stage = stages[active];
-  return <div className="lifecycle-demo">
+  return <div className="lifecycle-demo" onTouchStart={(event) => { touchStart.current = event.touches[0]?.clientX ?? null; }} onTouchEnd={(event) => { if (touchStart.current === null) return; const delta = event.changedTouches[0].clientX - touchStart.current; if (Math.abs(delta) > 48) setActive((current) => Math.min(stages.length - 1, Math.max(0, current + (delta < 0 ? 1 : -1)))); touchStart.current = null; }}>
     <div className="lifecycle-rail" role="tablist" aria-label="Procurement lifecycle stages">
       {stages.map((item, index) => <button className={`stage-tab${active === index ? " selected" : ""}`} key={item.title} onClick={() => setActive(index)} role="tab" aria-selected={active === index} aria-controls="stage-detail" id={`stage-tab-${index}`}>
         <span className="stage-number">{String(index + 1).padStart(2, "0")}</span><span className="stage-tab-title">{item.title}</span><span className="stage-connector"/>
@@ -56,27 +70,49 @@ function LifecycleDemo() {
 
 export function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const progressRef = useRef<HTMLSpanElement>(null);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+    const updateProgress = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const root = document.documentElement;
+        const range = root.scrollHeight - window.innerHeight;
+        const progress = range > 0 ? window.scrollY / range : 0;
+        if (progressRef.current) progressRef.current.style.transform = `scaleX(${Math.min(1, Math.max(0, progress))})`;
+      });
+    };
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      return () => {
+        cancelAnimationFrame(frame);
+        window.removeEventListener("scroll", updateProgress);
+        window.removeEventListener("resize", updateProgress);
+      };
+    }
     const sections = document.querySelectorAll<HTMLElement>(".public-site > section:not(.hero-section):not(.closing-section)");
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add("is-revealed");
-        observer.unobserve(entry.target);
+        entry.target.classList.toggle("is-revealed", entry.isIntersecting);
       }
-    }, { threshold: 0.12, rootMargin: "0px 0px -24px 0px" });
+    }, { threshold: 0.14, rootMargin: "0px 0px -36px 0px" });
     sections.forEach((section) => {
       section.classList.add("site-reveal");
       observer.observe(section);
     });
     document.documentElement.classList.add("has-scroll-reveals");
     return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
       observer.disconnect();
       document.documentElement.classList.remove("has-scroll-reveals");
     };
   }, []);
-  return <main className="public-site"><div className="scroll-progress" aria-hidden="true"><span /></div>
+  return <main className="public-site"><div className="scroll-progress" aria-hidden="true"><span ref={progressRef} /></div>
     <header className="site-header"><Link href="/" className="site-brand" aria-label="Alesxras home"><Mark/><span>alesxras</span></Link><button className="mobile-menu" aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}><span/><span/></button><nav className={`site-nav${menuOpen ? " open" : ""}`} aria-label="Main navigation"><a href="#network" onClick={() => setMenuOpen(false)}>The network</a><Link href="/how-it-works" onClick={() => setMenuOpen(false)}>How it works</Link><Link href="/work" onClick={() => setMenuOpen(false)}>Our work</Link><Link href="/privacy" onClick={() => setMenuOpen(false)}>Privacy</Link><Link className="nav-launch" href="/launch">Launch app</Link></nav></header>
 
     <section className="hero-section" id="top"><div className="hero-copy"><h1>Business moves<br/>when <em>trust</em> moves.</h1><p className="hero-lede">A private procurement network where buyers, suppliers and intelligent agents move from brief to decision | with people firmly in control.</p><div className="hero-actions"><Link className="button-primary" href="/launch">Launch app</Link><a className="button-secondary" href="#network">Explore the network <span>↓</span></a></div><p className="hero-note"><span className="testnet-pip"/>Built for business on NEAR <span className="note-divider"/> Testnet experience</p></div><NetworkArtwork/><div className="hero-index"><span>01</span><span className="index-line"/><span>07</span></div><a className="scroll-cue" href="#network" aria-label="Scroll to explore"><span>SCROLL TO EXPLORE</span><i /></a></section>
