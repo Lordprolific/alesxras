@@ -358,7 +358,7 @@ html.has-scroll-reveals .public-site .site-reveal.is-revealed { opacity: 1; tran
 .intelligence-head > p { color: #c0b4c0; }
 .intelligence-flow { display: grid; grid-template-columns: 1fr 80px 1.35fr 80px 1fr; align-items: center; gap: 12px; min-height: 203px; border-top: 1px solid rgb(255 255 255 / 14%); border-bottom: 1px solid rgb(255 255 255 / 14%); }
 .evidence-source, .recommendation { display: flex; flex-direction: column; align-items: center; gap: 7px; text-align: center; }
-.flow-symbol, .recommendation-mark { display: grid; width: 44px; height: 44px; place-items: center; margin-bottom: 5px; border: 1px solid rgb(255 255 255 / 20%); color: #e5b0c3; font-family: Georgia, serif; font-size: 25px; }
+.flow-symbol, .recommendation-mark { display: grid; width: 44px; height: 44px; place-items: center; margin-bottom: 5px; border: 1px solid rgb(247 168 196 / 34%); color: var(--site-pink); font-family: Georgia, serif; font-size: 25px; }.flow-symbol svg, .recommendation-mark svg, .agent-spark svg { display: block; width: 20px; height: 20px; }.flow-symbol { background: rgb(252 228 237 / 5%); }.agent-spark { display: grid; width: 24px; height: 24px; place-items: center; color: var(--site-pink); }.agent-spark svg { width: 22px; height: 22px; }.recommendation-mark { border-color: rgb(165 184 165 / 48%); color: var(--site-sage); }
 .recommendation-mark { border-color: rgb(165 184 165 / 48%); color: #b9ceb9; }
 .evidence-source strong, .recommendation strong { font-size: 11px; font-weight: 550; }
 .evidence-source small, .recommendation small { color: #b6aab6; font-size: 9px; }
