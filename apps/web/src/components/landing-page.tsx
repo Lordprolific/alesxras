@@ -128,10 +128,10 @@ export function LandingPage() {
       <div className="intelligence-flow" aria-label="Evidence is evaluated by an agent and then passed to a buyer for human review">
         <svg className="intelligence-connectors" viewBox="0 0 1000 250" preserveAspectRatio="none" aria-hidden="true">
           <defs><linearGradient id="workflow-line" x1="0" x2="1"><stop offset="0" stopColor="#F7A8C4"/><stop offset=".52" stopColor="#C58BA5"/><stop offset="1" stopColor="#A5B8A5"/></linearGradient><filter id="workflow-glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-          <path className="workflow-track" d="M205 124H395 M605 124H795" />
+          <path className="workflow-track" d="M300 124H350 M650 124H700" />
           <path className="workflow-active" d="M205 124H395 M605 124H795" />
-          <circle r="5" className="workflow-packet packet-one" filter="url(#workflow-glow)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M205 124H395"/></circle>
-          <circle r="5" className="workflow-packet packet-two" filter="url(#workflow-glow)"><animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" path="M605 124H795"/></circle>
+          <circle r="5" className="workflow-packet packet-one" filter="url(#workflow-glow)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M300 124H350"/></circle>
+          <circle r="5" className="workflow-packet packet-two" filter="url(#workflow-glow)"><animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" path="M650 124H700"/></circle>
         </svg>
         <article className="flow-stage evidence-source">
           <span className="flow-stage-index">01 / INPUT</span>
