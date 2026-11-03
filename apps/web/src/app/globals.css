@@ -824,3 +824,51 @@ html.has-scroll-reveals .public-site .site-reveal.is-revealed { opacity: 1; tran
     animation: none !important;
   }
 }
+
+/* Corrective visual pass: resolve legacy layout conflicts and establish real depth */
+.public-site .intelligence-section { background: #302832 !important; color: #fff !important; }
+.public-site .intelligence-flow { grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) !important; gap: clamp(18px,4vw,58px) !important; min-height: 0 !important; border: 0 !important; }
+.public-site .flow-stage, .public-site .evidence-source, .public-site .recommendation, .public-site .agent-core {
+  min-width: 0; align-items: flex-start !important; text-align: left !important;
+  background: linear-gradient(145deg,#403642,#382f3a) !important; color: #fff !important;
+}
+.public-site .agent-core { background: linear-gradient(145deg,#594354,#493744) !important; }
+.public-site .evidence-source strong, .public-site .recommendation strong, .public-site .agent-core strong { font-size: clamp(17px,1.7vw,21px) !important; color: #fff !important; }
+.public-site .evidence-source small, .public-site .recommendation small, .public-site .agent-core small { font-size: 13px !important; color: #c8bdc8 !important; }
+.public-site .intelligence-connectors { z-index: 2; overflow: visible; }
+.public-site .workflow-track, .public-site .workflow-active { vector-effect: non-scaling-stroke; }
+.public-site .approval-section { background: #f7f2f5 !important; }
+.public-site .approval-glyph, .public-site .approval-seal { flex-shrink: 0; }
+.public-site .network-art { transform-style: preserve-3d; perspective: 1100px; }
+.public-site .network-art .art-orbit { transform-style: preserve-3d; }
+.public-site .network-art .orbit-one { transform: rotateX(66deg) rotateZ(-22deg) translateZ(26px); }
+.public-site .network-art .orbit-two { transform: rotateY(58deg) rotateZ(24deg) translateZ(-18px); }
+.public-site .network-art .orbit-three { transform: rotateX(72deg) rotateZ(58deg) translateZ(44px); }
+.public-site .network-art .art-lines { transform: translate3d(calc(var(--pointer-x) * 4px),calc(var(--pointer-y) * 4px),36px) rotateX(7deg); transform-style: preserve-3d; }
+.public-site .network-art .art-center { transform: translate3d(calc(var(--pointer-x) * -10px),calc(var(--pointer-y) * -10px),72px); }
+.public-site .lifecycle-demo { perspective: 1400px; transform-style: preserve-3d; }
+.public-site .stage-window { transform: translateZ(12px); transform-style: preserve-3d; }
+.public-site .procurement-art { transform: perspective(900px) rotateY(-9deg) rotateX(5deg); transform-style: preserve-3d; }
+.public-site .brief-sheet { transform: translateZ(24px); box-shadow: 0 24px 48px rgb(48 40 50 / 14%); }
+.public-site .process-node { transform: translateZ(46px); }
+.public-site .privacy-visual, .public-site .near-graphic { perspective: 1100px; transform-style: preserve-3d; }
+.public-site .privacy-lock { transform: translateZ(54px); }
+.public-site .privacy-orbit { transform-style: preserve-3d; }
+.public-site .privacy-orbit.po-1 { transform: rotateX(68deg) rotateZ(-20deg) translateZ(16px); }
+.public-site .privacy-orbit.po-2 { transform: rotateY(62deg) rotateZ(18deg) translateZ(30px); }
+.public-site .near-disc.disc-back { transform: translateZ(-34px) rotateX(58deg) rotateZ(-20deg); }
+.public-site .near-disc.disc-front { transform: translateZ(48px) rotateX(8deg); }
+.public-site .chain-node { transform: translateZ(32px); }
+.public-site .participant { transform-style: preserve-3d; perspective: 800px; }
+.public-site .participant-glyph { transform: translateZ(18px); }
+@media (max-width:760px) {
+ .public-site .intelligence-flow { grid-template-columns: minmax(0,1fr) !important; gap: 16px !important; }
+ .public-site .intelligence-connectors { display:none !important; }
+ .public-site .procurement-art { transform: none; }
+ .public-site .near-disc.disc-back,.public-site .near-disc.disc-front { transform: none; }
+}
+@media (prefers-reduced-motion:reduce) {
+ .public-site .network-art .art-orbit,.public-site .network-art .art-lines,.public-site .network-art .art-center,
+ .public-site .procurement-art,.public-site .brief-sheet,.public-site .process-node,
+ .public-site .privacy-orbit,.public-site .privacy-lock,.public-site .near-disc,.public-site .chain-node { transform:none !important; }
+}
