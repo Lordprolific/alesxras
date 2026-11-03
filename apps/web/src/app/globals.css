@@ -979,3 +979,54 @@ html.has-scroll-reveals .public-site .site-reveal.is-revealed { opacity: 1; tran
 .public-site .agent-orbit-small { border-color:rgb(247 168 196 / 40%) !important; }
 .public-site .agent-orbit-small::before,.public-site .agent-orbit-small::after { border-color:rgb(247 168 196 / 20%) !important; }
 .public-site .approval-ring.ring-two { border-color:rgb(247 168 196 / 30%) !important; }
+
+/* Restore the original Alesxras type system. No typography redesign. */
+.public-site {
+  font-family: "Aptos", "Segoe UI", Arial, sans-serif !important;
+}
+.public-site .hero-copy h1,
+.public-site .intro-main h2,
+.public-site .section-heading-row h2,
+.public-site .privacy-copy h2,
+.public-site .intelligence-head h2,
+.public-site .participants-intro h2,
+.public-site .near-left h2,
+.public-site .approval-copy h2,
+.public-site .closing-section h2,
+.public-site .launch-card h1,
+.public-site .window-copy h3,
+.public-site .participant h3 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-weight: 400 !important;
+}
+.public-site .hero-copy h1 { line-height: .99 !important; letter-spacing: -.065em !important; }
+.public-site .intro-main h2,
+.public-site .section-heading-row h2,
+.public-site .intelligence-head h2,
+.public-site .participants-intro h2,
+.public-site .near-left h2,
+.public-site .approval-copy h2 {
+  letter-spacing: -.05em !important;
+  line-height: 1.1 !important;
+}
+.public-site .privacy-copy h2 { letter-spacing: -.055em !important; line-height: 1.04 !important; }
+.public-site .closing-section h2 { letter-spacing: -.05em !important; line-height: 1 !important; }
+.public-site .hero-copy h1 em,
+.public-site .privacy-copy h2 em,
+.public-site .approval-copy h2 em,
+.public-site .closing-section h2 em,
+.public-site .launch-card h1 em { font-weight: 400 !important; }
+.public-site .flow-stage-index,
+.public-site .flow-stage strong,
+.public-site .authority-eyebrow,
+.public-site .human-authority-strip strong,
+.public-site .near-step strong,
+.public-site .near-graphic-head,
+.public-site .near-hub strong,
+.public-site .approval-glyph > span,
+.public-site .approval-seal strong {
+  font-weight: 400 !important;
+}
+.public-site .section-index,
+.public-site .hero-kicker { font-weight: 400 !important; }
+.public-site .network-warning { font-weight: 400 !important; }
