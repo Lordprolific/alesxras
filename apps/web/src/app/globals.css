@@ -660,3 +660,51 @@ html.has-scroll-reveals .public-site .site-reveal.is-revealed { opacity: 1; tran
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Motion system: replayable viewport reveals, pointer depth and tactile transitions */
+.public-site .site-reveal {
+  opacity: 0;
+  transform: translate3d(0, 34px, 0) scale(.992);
+  filter: blur(3px);
+  transition: opacity .8s cubic-bezier(.2,.72,.2,1), transform .8s cubic-bezier(.2,.72,.2,1), filter .8s ease;
+  will-change: opacity, transform, filter;
+}
+.public-site .site-reveal.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+.public-site .site-reveal > * {
+  transition: opacity .65s ease, transform .75s cubic-bezier(.2,.72,.2,1);
+}
+.public-site .site-reveal:not(.is-revealed) > * { opacity: .45; transform: translateY(14px); }
+.public-site .site-reveal.is-revealed > * { opacity: 1; transform: translateY(0); }
+.public-site .site-reveal.is-revealed > *:nth-child(2) { transition-delay: .08s; }
+.public-site .site-reveal.is-revealed > *:nth-child(3) { transition-delay: .16s; }
+.public-site .site-reveal.is-revealed > *:nth-child(4) { transition-delay: .24s; }
+.public-site .network-art { --pointer-x: 0; --pointer-y: 0; perspective: 900px; }
+.public-site .network-art .art-center { transform: translate3d(calc(var(--pointer-x) * -10px), calc(var(--pointer-y) * -10px), 0); transition: transform .35s ease-out; }
+.public-site .network-art .art-orbit { transform: translate3d(calc(var(--pointer-x) * 7px), calc(var(--pointer-y) * 7px), 0); transition: transform .5s ease-out; }
+.public-site .network-art .art-lines { transform: translate3d(calc(var(--pointer-x) * 4px), calc(var(--pointer-y) * 4px), 0); transition: transform .45s ease-out; }
+.public-site .stage-window[role="tabpanel"] { animation: stage-arrive .48s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes stage-arrive { from { opacity: 0; transform: translateY(12px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.public-site .procurement-art .process-node { animation: node-breathe 3.4s ease-in-out infinite; }
+.public-site .procurement-art .p-agent { animation-delay: .5s; }
+.public-site .procurement-art .p-supplier { animation-delay: 1s; }
+.public-site .procurement-art .p-chain { animation-delay: 1.5s; }
+@keyframes node-breathe { 0%, 100% { box-shadow: 0 0 0 0 rgb(169 111 139 / 0%); } 50% { box-shadow: 0 0 0 8px rgb(169 111 139 / 8%); } }
+.public-site .flow-link i { animation: flow-travel 1.8s ease-in-out infinite; }
+.public-site .flow-link i:nth-child(2) { animation-delay: .25s; }
+.public-site .flow-link i:nth-child(3) { animation-delay: .5s; }
+@keyframes flow-travel { 0%, 100% { opacity: .25; transform: translateX(-3px); } 50% { opacity: 1; transform: translateX(3px); } }
+.public-site .near-path path { stroke-dasharray: 7 10; animation: path-dash 18s linear infinite; }
+@keyframes path-dash { to { stroke-dashoffset: -170; } }
+.public-site .scroll-progress span { width: 100%; transform-origin: left center; transition: transform .08s linear; }
+@media (prefers-reduced-motion: reduce) {
+  .public-site .site-reveal, .public-site .site-reveal > *, .public-site .network-art *,
+  .public-site .procurement-art *, .public-site .flow-link i, .public-site .near-path path {
+    animation: none !important; transition: none !important; filter: none !important;
+    transform: none !important; opacity: 1 !important;
+  }
+}
