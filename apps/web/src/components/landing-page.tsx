@@ -172,7 +172,7 @@ export function LandingPage() {
     </section>
 
     <section className="approval-section" id="human-control">
-      <div className="approval-copy"><span className="section-index">07 / CONTROL THAT STAYS HUMAN</span><h2>Automation can move work.<br/><em>Only people move decisions.</em></h2><p>Agent assistance can narrow the search and explain a recommendation. A buyer still reviews the evidence and approves the supplier. Signing keys stay outside agents and web requests.</p><div className="approval-principles"><span><i/>Human review remains mandatory</span><span><i/>Agents cannot approve or sign</span></div></div>
+      <div className="approval-copy"><span className="section-index">07 / CONTROL THAT STAYS HUMAN</span><h2>Automation can move work.<br/><em>Only people move decisions.</em></h2><p>Agent assistance can narrow the search and explain a recommendation. A buyer still reviews the evidence and approves the supplier. Signing keys stay outside agents and web requests.</p></div>
       <div className="approval-visual" aria-label="Human approval is required; automatic approval is disabled">
         <div className="approval-glyph"><div className="approval-ring ring-one"/><div className="approval-ring ring-two"/><span>BUYER<br/>REVIEW</span><i className="approval-signal"/></div>
         <div className="approval-seal"><span>NO</span><strong>AUTO<br/>APPROVAL</strong></div>
