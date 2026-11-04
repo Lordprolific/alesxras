@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Buffer } from "buffer";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setupWalletSelector, type WalletSelector } from "@near-wallet-selector/core";
@@ -45,13 +46,14 @@ export function LaunchGate() {
       if (typeof wallet.signMessage !== "function") throw new Error("This wallet does not support signing a private login message.");
       setState("signing");
 
-      const nonceBytes = crypto.getRandomValues(new Uint8Array(32));
+      // NEP-413 requires an actual Buffer instance, not a Uint8Array cast to Buffer.
+      const nonceBuffer = Buffer.from(crypto.getRandomValues(new Uint8Array(32)));
+      const nonce = toBase64Url(nonceBuffer);
       const issuedAt = Date.now();
       const expiresAt = issuedAt + SESSION_DURATION_SECONDS * 1000;
-      const nonce = toBase64Url(nonceBytes);
       const recipient = window.location.host.toLowerCase();
       const messageFields = { nonce, issuedAt, expiresAt, recipient };
-      const signed = await wallet.signMessage({ message: sessionMessage(messageFields), recipient, nonce: nonceBytes as unknown as Buffer });
+      const signed = await wallet.signMessage({ message: sessionMessage(messageFields), recipient, nonce: nonceBuffer });
       if (!signed?.signature || !signed.publicKey || !signed.accountId) {
         throw new Error("The wallet did not return a complete signature for this account.");
       }
