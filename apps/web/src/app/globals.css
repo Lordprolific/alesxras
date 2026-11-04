@@ -1094,3 +1094,9 @@ html.has-scroll-reveals .public-site .site-reveal.is-revealed { opacity: 1; tran
 @media (prefers-reduced-motion:reduce) {
  .public-site .intelligence-section *,.public-site .intelligence-section *::before,.public-site .intelligence-section *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
 }
+
+
+/* Wallet choices on the testnet access screen. */
+.launch-wallet-options { display:grid; gap:10px; width:100%; margin-top:24px; }
+.launch-wallet-options .launch-connect { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; min-height:62px; }
+.launch-wallet-options .launch-connect small { display:block; font-size:11px; line-height:1.4; font-weight:400; opacity:.78; }
