@@ -39,7 +39,7 @@ function NetworkArtwork() {
       <circle className="pulse-dot pulse-b" r="4"><animateMotion dur="7.2s" begin="1s" repeatCount="indefinite" path="M110 294C202 294 183 428 302 428S380 280 494 280"/></circle>
       <circle className="pulse-dot pulse-c" r="3"><animateMotion dur="5.6s" begin="2.2s" repeatCount="indefinite" path="M275 126C340 126 331 280 494 280"/></circle>
     </svg>
-    <div className="art-center"><div className="center-halo"/><Mark light/><span>alesxras</span></div>
+    <div className="art-center"><div className="center-halo"/><Mark light/></div>
     
   </div>;
 }
