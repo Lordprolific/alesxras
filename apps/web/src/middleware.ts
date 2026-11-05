@@ -34,7 +34,7 @@ function isValidProof(proof: unknown, host: string): proof is SessionProof {
     candidate.issuedAt <= now + 30_000 &&
     candidate.expiresAt > now &&
     candidate.expiresAt - candidate.issuedAt === lifetime &&
-    /^[a-z0-9.-]+(?::\\d{1,5})?$/.test(candidate.recipient) &&
+    /^[a-z0-9.-]+(?::\d{1,5})?$/.test(candidate.recipient) &&
     candidate.recipient === host
   );
 }
