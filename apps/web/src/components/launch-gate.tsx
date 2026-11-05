@@ -86,6 +86,7 @@ export function LaunchGate() {
         const result = await response.json().catch(() => null) as { error?: string } | null;
         throw new Error(result?.error ?? "The signed wallet session could not be verified.");
       }
+      setState("opening");
       router.replace(returnTo);
       router.refresh();
     } catch (error) {
