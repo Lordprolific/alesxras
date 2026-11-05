@@ -1,0 +1,192 @@
+/* Alesxras workspace palette — scoped to the authenticated dashboard. */
+.app-shell {
+  --workspace-plum: #302832;
+  --workspace-pink: #F7A8C4;
+  --workspace-blush: #FCE4ED;
+  --workspace-white: #FFFFFF;
+  --workspace-ink: #302832;
+  --workspace-muted: #817780;
+  --workspace-line: #EDE5EA;
+  --workspace-paper: #FBF8FA;
+  color: var(--workspace-ink);
+  background: var(--workspace-paper);
+}
+.app-shell .sidebar {
+  background: var(--workspace-plum);
+  border-right-color: rgb(252 228 237 / 14%);
+  color: var(--workspace-white);
+}
+.app-shell .brand { color: var(--workspace-white); }
+.app-shell .brand-mark { color: var(--workspace-pink); }
+.app-shell .workspace-switcher {
+  background: rgb(255 255 255 / 5%);
+  border-color: rgb(252 228 237 / 17%);
+}
+.app-shell .workspace-avatar,
+.app-shell .profile-avatar,
+.app-shell .mini-avatar {
+  background: rgb(247 168 196 / 17%);
+  color: var(--workspace-pink);
+}
+.app-shell .workspace-name strong { color: var(--workspace-white); }
+.app-shell .workspace-name span,
+.app-shell .chevron,
+.app-shell .network-chevron { color: rgb(252 228 237 / 66%); }
+.app-shell .nav-heading { color: rgb(252 228 237 / 52%); }
+.app-shell .nav-item { color: rgb(255 255 255 / 76%); }
+.app-shell .nav-item:hover {
+  background: rgb(252 228 237 / 9%);
+  color: var(--workspace-white);
+}
+.app-shell .nav-item.active {
+  background: var(--workspace-blush);
+  color: var(--workspace-plum);
+}
+.app-shell .nav-icon { color: var(--workspace-pink); }
+.app-shell .nav-item.active .nav-icon { color: var(--workspace-plum); }
+.app-shell .nav-count {
+  background: rgb(252 228 237 / 13%);
+  color: var(--workspace-blush);
+}
+.app-shell .nav-count.attention {
+  background: var(--workspace-pink);
+  color: var(--workspace-plum);
+}
+.app-shell .network-card {
+  background: rgb(255 255 255 / 5%);
+  border-color: rgb(252 228 237 / 17%);
+}
+.app-shell .network-card strong { color: var(--workspace-blush); }
+.app-shell .network-card span:not(.network-dot) { color: rgb(252 228 237 / 65%); }
+.app-shell .network-dot {
+  background: var(--workspace-pink);
+  box-shadow: 0 0 0 3px rgb(247 168 196 / 17%);
+}
+.app-shell .profile-row { border-top-color: rgb(252 228 237 / 17%); }
+.app-shell .main-panel { background: var(--workspace-paper); }
+.app-shell .topbar {
+  background: rgb(255 255 255 / 94%);
+  border-bottom-color: var(--workspace-line);
+}
+.app-shell .breadcrumb { color: var(--workspace-muted); }
+.app-shell .breadcrumb strong { color: var(--workspace-plum); }
+.app-shell .breadcrumb-slash { color: #CBBCC5; }
+.app-shell .demo-label { color: var(--workspace-muted); }
+.app-shell .demo-label span { background: var(--workspace-pink); }
+.app-shell .content-wrap { color: var(--workspace-ink); }
+.app-shell .eyebrow { color: #A16F87; }
+.app-shell h1 { color: var(--workspace-plum); }
+.app-shell .welcome-copy { color: var(--workspace-muted); }
+.app-shell .create-button,
+.app-shell .review-button {
+  background: var(--workspace-plum);
+  color: var(--workspace-white);
+}
+.app-shell .create-button:hover,
+.app-shell .review-button:hover { background: #493B49; }
+.app-shell .signal-card,
+.app-shell .request-list,
+.app-shell .activity-panel,
+.app-shell .approval-panel {
+  background: var(--workspace-white);
+  border-color: var(--workspace-line);
+}
+.app-shell .signal-label { color: var(--workspace-muted); }
+.app-shell .signal-mark { color: #B78A9F; }
+.app-shell .signal-value { color: var(--workspace-plum); }
+.app-shell .signal-value small,
+.app-shell .signal-foot { color: var(--workspace-muted); }
+.app-shell .trend-up,
+.app-shell .trend-note { color: #A45F7E; }
+.app-shell .sparkline path { stroke: #D98EAB; }
+.app-shell .signal-rail { background: var(--workspace-blush); }
+.app-shell .signal-rail span { background: var(--workspace-pink); }
+.app-shell .bars i { background: #E9B9CC; }
+.app-shell .network-signal { background: #FCF5F8; }
+.app-shell .network-status { color: var(--workspace-plum); }
+.app-shell .section-heading h2,
+.app-shell .panel-heading h2 { color: var(--workspace-plum); }
+.app-shell .section-heading p,
+.app-shell .panel-heading p { color: var(--workspace-muted); }
+.app-shell .text-link,
+.app-shell .activity-link { color: #9A5F7B; }
+.app-shell .request-head {
+  background: #FCF8FA;
+  border-bottom-color: var(--workspace-line);
+  color: #9A8C96;
+}
+.app-shell .request-row { border-bottom-color: #F3EDF1; }
+.app-shell .request-row:hover { background: #FDF9FB; }
+.app-shell .request-main strong { color: var(--workspace-plum); }
+.app-shell .request-id,
+.app-shell .category,
+.app-shell .updated,
+.app-shell .row-menu { color: var(--workspace-muted); }
+.app-shell .bid-count { color: #6F626D; }
+.app-shell .bid-stack i { background: #E8C1D0; }
+.app-shell .bid-stack i:nth-child(2) { background: #F5DCE6; }
+.app-shell .bid-stack i:nth-child(3) { background: #D9C9D3; }
+.app-shell .budget { color: var(--workspace-plum); }
+.app-shell .status-pill {
+  background: var(--workspace-blush);
+  color: #795267;
+}
+.app-shell .status-pill i { background: #C9799B; }
+.app-shell .status-pill.approval {
+  background: #F9EAF0;
+  color: #8C4969;
+}
+.app-shell .status-pill.approval i { background: #B95F85; }
+.app-shell .status-pill.negotiation {
+  background: #F2EDF1;
+  color: #6F626D;
+}
+.app-shell .status-pill.negotiation i { background: #9A8794; }
+.app-shell .activity-item { border-bottom-color: #F1EAF0; }
+.app-shell .activity-marker {
+  background: var(--workspace-blush);
+  color: #925A75;
+}
+.app-shell .activity-item:nth-child(2) .activity-marker {
+  background: #F9EAF0;
+  color: #9A5F7B;
+}
+.app-shell .activity-item:nth-child(3) .activity-marker {
+  background: #F2EDF1;
+  color: #796A77;
+}
+.app-shell .activity-copy strong { color: var(--workspace-plum); }
+.app-shell .activity-copy span,
+.app-shell .activity-item time { color: var(--workspace-muted); }
+.app-shell .approval-total {
+  background: var(--workspace-blush);
+  color: #89536D;
+}
+.app-shell .approval-feature {
+  background: #FDF9FB;
+  border-color: #F0E1E9;
+}
+.app-shell .approval-date { color: #9A5F7B; }
+.app-shell .approval-feature h3 { color: var(--workspace-plum); }
+.app-shell .approval-feature > p,
+.app-shell .approval-amount { color: var(--workspace-muted); }
+.app-shell .approval-feature > p strong,
+.app-shell .approval-amount strong { color: var(--workspace-plum); }
+.app-shell .approval-amount { border-top-color: #F0E6EC; }
+.app-shell .approval-amount small { color: var(--workspace-muted); }
+.app-shell .approval-footnote { color: var(--workspace-muted); }
+.app-shell .approval-footnote span { color: #B96E8D; }
+.app-shell .page-footer { color: #9A8D97; }
+.app-shell button:focus-visible,
+.app-shell a:focus-visible {
+  outline: 3px solid var(--workspace-pink);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .app-shell .sidebar {
+    background: var(--workspace-plum);
+    border-bottom-color: rgb(252 228 237 / 14%);
+  }
+  .app-shell .nav-item { color: rgb(255 255 255 / 80%); }
+  .app-shell .nav-item.active { color: var(--workspace-plum); }
+}
