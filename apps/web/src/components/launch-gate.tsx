@@ -8,7 +8,7 @@ import { setupWalletSelector, type WalletSelector } from "@near-wallet-selector/
 import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 import { setupSender } from "@near-wallet-selector/sender";
-import { SESSION_DURATION_SECONDS } from "@/lib/auth";
+const SESSION_DURATION_SECONDS = 60 * 60 * 4;
 
 type WalletId = "meteor-wallet" | "sender" | "my-near-wallet";
 
