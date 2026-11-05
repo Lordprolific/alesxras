@@ -44,7 +44,7 @@ function isValidProofShape(proof: SignedSessionProof, now = Date.now()) {
     proof.issuedAt <= now + 30_000 &&
     proof.expiresAt > now &&
     proof.expiresAt - proof.issuedAt === SESSION_DURATION_SECONDS * 1000 &&
-    /^[a-z0-9.-]+(?::\\d{1,5})?$/.test(proof.recipient)
+    /^[a-z0-9.-]+(?:\d{1,5})?$/.test(proof.recipient)
   );
 }
 
