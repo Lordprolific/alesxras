@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./content-pages.css";
+import "./workspace-theme.css";
 
 export const metadata: Metadata = {
   title: "Alesxras | Procurement, under control",
