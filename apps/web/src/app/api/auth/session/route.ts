@@ -4,8 +4,9 @@ import { decodeSessionProof, encodeSessionProof, SESSION_COOKIE, SESSION_DURATIO
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
+  // Session cookies are HMAC-verified locally; do not repeat the external NEAR RPC check.
   const proof = decodeSessionProof(request.cookies.get(SESSION_COOKIE)?.value);
-  if (!proof || !(await verifySessionProof(proof))) {
+  if (!proof) {
     const response = NextResponse.json({ authenticated: false }, { status: 401 });
     response.cookies.delete(SESSION_COOKIE);
     return response;
@@ -32,8 +33,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "The testnet wallet proof could not be verified." }, { status: 401 });
   }
 
+  let sessionCookie: string;
+  try {
+    sessionCookie = encodeSessionProof(proof);
+  } catch {
+    return NextResponse.json({ error: "Server session signing is not configured." }, { status: 503 });
+  }
+
   const response = NextResponse.json({ authenticated: true, accountId: proof.accountId, network: "testnet" });
-  response.cookies.set(SESSION_COOKIE, encodeSessionProof(proof), {
+  response.cookies.set(SESSION_COOKIE, sessionCookie, {
     httpOnly: true,
     secure: request.nextUrl.protocol === "https:",
     sameSite: "strict",
