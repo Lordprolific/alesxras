@@ -20,6 +20,15 @@ type WorkspaceData = {
   requests: ProcurementRequest[];
 };
 
+type AgentRun = {
+  id: string;
+  procurement_id: string | null;
+  kind: "evaluate_procurement" | "negotiate_bid" | "verify_transaction";
+  status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+  step_count: number;
+  created_at: string;
+};
+
 type UserProfile = {
   accountId: string;
   displayName: string;
@@ -67,12 +76,59 @@ export function Dashboard() {
   const [showCreate, setShowCreate] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
+  const [agentRuns, setAgentRuns] = useState<AgentRun[]>([]);
+  const [agentRunsLoading, setAgentRunsLoading] = useState(true);
+  const [agentRunKind, setAgentRunKind] = useState<AgentRun["kind"]>("evaluate_procurement");
+  const [agentRequestId, setAgentRequestId] = useState("");
+  const [agentQueueing, setAgentQueueing] = useState(false);
+  const [agentMessage, setAgentMessage] = useState("");
+  const [agentError, setAgentError] = useState("");
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [profileError, setProfileError] = useState("");
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState("spark");
   const [profileSaving, setProfileSaving] = useState(false);
+
+  async function loadAgentRuns() {
+    setAgentRunsLoading(true);
+    try {
+      const response = await fetch("/api/workspace/agent-runs", { cache: "no-store" });
+      const result = await response.json() as { runs?: AgentRun[] };
+      if (!response.ok) throw new Error("Could not load agent activity.");
+      setAgentRuns(result.runs ?? []);
+    } catch (cause) {
+      setAgentError(cause instanceof Error ? cause.message : "Could not load agent activity.");
+    } finally {
+      setAgentRunsLoading(false);
+    }
+  }
+
+  async function queueAgentRun(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!agentRequestId) {
+      setAgentError("Choose a procurement request first.");
+      return;
+    }
+    setAgentQueueing(true);
+    setAgentError("");
+    setAgentMessage("");
+    try {
+      const response = await fetch("/api/workspace/agent-runs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: agentRunKind, procurementId: agentRequestId }),
+      });
+      const result = await response.json() as { error?: string; run?: AgentRun };
+      if (!response.ok || !result.run) throw new Error(result.error || "The agent task could not be recorded.");
+      setAgentMessage("Task recorded in the workspace queue. Execution will begin when the agent worker is connected.");
+      await loadAgentRuns();
+    } catch (cause) {
+      setAgentError(cause instanceof Error ? cause.message : "The agent task could not be recorded.");
+    } finally {
+      setAgentQueueing(false);
+    }
+  }
 
   async function loadProfile() {
     setProfileLoading(true);
@@ -134,6 +190,7 @@ export function Dashboard() {
   }
 
   useEffect(() => { void load(); }, []);
+  useEffect(() => { void loadAgentRuns(); }, []);
   useEffect(() => { void loadProfile(); }, []);
 
   const requests = useMemo(() => (data?.requests ?? []).filter((item) => {
@@ -186,6 +243,7 @@ export function Dashboard() {
         <p className="nav-heading">Workspace</p>
         <nav className="primary-nav" aria-label="Workspace navigation">
           <a className="nav-item active" href="#overview">Overview</a>
+          <a className="nav-item" href="#agents">Agent operations</a>
           <a className="nav-item" href="#requests">Procurement</a>
           <a className="nav-item" href="#create-request" onClick={() => setShowCreate(true)}>New request</a>
         </nav>
@@ -221,6 +279,30 @@ export function Dashboard() {
             <article className="signal-card"><div className="signal-label">In progress</div><div className="signal-value">{openCount}</div><div className="signal-foot">Open, evaluating or negotiating</div></article>
             <article className="signal-card"><div className="signal-label">Awaiting approval</div><div className="signal-value">{approvalCount}</div><div className="signal-foot">Requires an explicit human decision</div></article>
             <article className="signal-card network-signal"><div className="signal-label">Network</div><div className="network-status disconnected"><span className="network-dot pending" />NEAR testnet</div><div className="signal-foot">No transaction is submitted automatically</div></article>
+          </section>
+
+          <section className="activity-panel agent-command-panel" id="agents">
+            <div className="panel-heading"><div><p className="eyebrow">Autonomous operations</p><h2>Agent operations</h2><p>Coordinate procurement work through bounded agent tasks, with people retaining approval authority.</p></div><span className="agent-foundation-tag">Orchestration foundation</span></div>
+            <div className="agent-role-grid">
+              <article className="agent-role-card"><span className="agent-role-index">01</span><h3>Discovery agent</h3><p>Finds relevant sourcing opportunities and maps requirements to potential suppliers.</p><span>Opportunity research</span></article>
+              <article className="agent-role-card"><span className="agent-role-index">02</span><h3>Supplier agent</h3><p>Helps suppliers interpret briefs and prepare responses within owner-defined limits.</p><span>Proposal preparation</span></article>
+              <article className="agent-role-card"><span className="agent-role-index">03</span><h3>Evaluation agent</h3><p>Reviews procurement evidence and prepares structured comparisons for human review.</p><span>Evaluation workflow</span></article>
+              <article className="agent-role-card"><span className="agent-role-index">04</span><h3>Negotiation agent</h3><p>Coordinates permitted negotiation steps without exceeding approved boundaries.</p><span>Negotiation workflow</span></article>
+              <article className="agent-role-card"><span className="agent-role-index">05</span><h3>Verification agent</h3><p>Checks execution evidence and transaction conditions before a human-authorized action.</p><span>Verification workflow</span></article>
+            </div>
+            <div className="agent-workbench">
+              <div className="agent-workbench-copy"><p className="eyebrow">Task orchestration</p><h3>Prepare an agent task</h3><p>Choose the workflow and procurement record. This preview records a bounded task request; it does not call an AI provider, submit a transaction or execute an agent.</p></div>
+              <form className="agent-task-form" onSubmit={queueAgentRun}>
+                <label>Agent workflow<select value={agentRunKind} onChange={(event) => setAgentRunKind(event.target.value as AgentRun["kind"])}><option value="evaluate_procurement">Evaluate procurement</option><option value="negotiate_bid">Prepare negotiation</option><option value="verify_transaction">Verify transaction</option></select></label>
+                <label>Procurement request<select value={agentRequestId} onChange={(event) => setAgentRequestId(event.target.value)} required><option value="">Choose a request</option>{(data?.requests ?? []).map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</select></label>
+                <button className="create-button" type="submit" disabled={agentQueueing || !agentRequestId || !data?.requests.length}>{agentQueueing ? "Recording task…" : "Record agent task"}</button>
+              </form>
+            </div>
+            {agentMessage && <p className="agent-feedback success" role="status">{agentMessage}</p>}
+            {agentError && <p className="agent-feedback error" role="alert">{agentError}</p>}
+            <div className="agent-runs-heading"><div><h3>Recent agent activity</h3><p>Persisted task records for this workspace</p></div><button className="text-link refresh-button" type="button" onClick={() => void loadAgentRuns()} disabled={agentRunsLoading}>Refresh</button></div>
+            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <div className="agent-run-row" key={run.id}><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>)}</div>
+            <p className="agent-safety-note">Human approval remains mandatory. Autonomous execution is not enabled in this preview because the worker queue and AI provider adapter are not yet connected.</p>
           </section>
 
           {showCreate && <section className="activity-panel create-request-panel" id="create-request">
