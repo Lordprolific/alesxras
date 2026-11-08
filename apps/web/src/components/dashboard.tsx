@@ -33,7 +33,7 @@ const statusLabels: Record<string, string> = {
 };
 
 function formatBaseUnits(value: string, token: string) {
-  const normalized = value.replace(/^0+(?=\\d)/, "");
+  const normalized = value.replace(/^0+(?=\d)/, "");
   return `${normalized} ${token} base units`;
 }
 
@@ -153,9 +153,7 @@ export function Dashboard() {
               <label>Request title<input name="title" minLength={5} maxLength={120} required placeholder="e.g. NEAR smart contract security audit" /></label>
               <label>Project brief<textarea name="description" minLength={20} maxLength={5000} required rows={5} placeholder="Explain the scope, expected deliverables, timeline and any relevant context." /></label>
               <div className="form-two-col"><label>Budget (smallest token unit)<input name="budgetAmount" inputMode="numeric" pattern="[0-9]*" placeholder="Optional" /></label><label>Token symbol<select name="tokenId" defaultValue="NEAR"><option value="NEAR">NEAR</option></select></label></div>
-              <label>Requirements <span className="field-hint">One requirement per line</span><textarea name="requirements" rows={3} placeholder="Relevant experience
-Delivery timeline
-Security documentation" /></label>
+              <label>Requirements <span className="field-hint">One requirement per line</span><textarea name="requirements" rows={3} placeholder={"Relevant experience\nDelivery timeline\nSecurity documentation"} /></label>
               {formError && <p className="form-error" role="alert">{formError}</p>}
               <div className="form-actions"><button type="button" className="secondary-button" onClick={() => setShowCreate(false)}>Cancel</button><button className="create-button" type="submit" disabled={saving}>{saving ? "Publishing…" : "Publish request"}</button></div>
             </form>
