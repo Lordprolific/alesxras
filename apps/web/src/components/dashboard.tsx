@@ -78,9 +78,8 @@ export function Dashboard() {
     const formElement = event.currentTarget;
     setSaving(true);
     setFormError("");
-    const form = new FormData(event.currentTarget);
-    const requirements = String(form.get("requirements") || "").split("
-").map((line) => line.trim()).filter(Boolean);
+    const form = new FormData(formElement);
+    const requirements = String(form.get("requirements") || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
     try {
       const response = await fetch("/api/workspace/requests", {
         method: "POST",
