@@ -70,6 +70,7 @@ export function Dashboard() {
 
   async function createRequest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formElement = event.currentTarget;
     setSaving(true);
     setFormError("");
     const form = new FormData(event.currentTarget);
@@ -88,7 +89,7 @@ export function Dashboard() {
       });
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error || "Request could not be created.");
-      event.currentTarget.reset();
+      formElement.reset();
       setShowCreate(false);
       await load();
     } catch (cause) {
