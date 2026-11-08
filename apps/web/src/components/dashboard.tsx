@@ -32,7 +32,7 @@ const statusLabels: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-function shortId(id: string) {
+function formatBaseUnits(value: string, token: string) {\n  const normalized = value.replace(/^0+(?=\\d)/, "");\n  return `${normalized} ${token} base units`;\n}\n\nfunction shortId(id: string) {
   return `PR-${id.slice(0, 8).toUpperCase()}`;
 }
 
@@ -156,10 +156,10 @@ export function Dashboard() {
           <div className="section-heading" id="requests"><div><h2>Procurement requests</h2><p>Live records from your authenticated workspace.</p></div><button className="text-link refresh-button" type="button" onClick={() => void load()} disabled={loading}>Refresh</button></div>
           <section className="request-list" aria-label="Procurement requests">
             <div className="request-toolbar"><input aria-label="Search requests" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search requests…" /><select aria-label="Filter by status" value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">All statuses</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
-            {loading ? <p className="empty-state">Loading your procurement records…</p> : error ? <div className="empty-state error-state"><p>{error}</p><button className="secondary-button" onClick={() => void load()}>Try again</button></div> : requests.length === 0 ? <div className="empty-state"><strong>{data?.requests.length ? "No matching requests" : "Your workspace is ready"}</strong><p>{data?.requests.length ? "Change the search or status filter." : "Create your first procurement request to begin receiving supplier proposals."}</p>{!data?.requests.length && <button className="create-button" onClick={() => setShowCreate(true)}>＋ Create first request</button>}</div> : requests.map((request) => <article className="request-row live-request-row" key={request.id}>
+            {loading ? <p className="empty-state">Loading your procurement records…</p> : error ? <div className="empty-state error-state"><p>{error}</p><button className="secondary-button" onClick={() => void load()}>Try again</button></div> : requests.length === 0 ? <div className="empty-state"><strong>{data?.requests.length ? "No matching requests" : "Your workspace is ready"}</strong><p>{data?.requests.length ? "Change the search or status filter." : "Create your first procurement request to begin receiving supplier proposals."}</p>{!data?.requests.length && <button className="create-button" onClick={() => setShowCreate(true)}>＋ Create first request</button>}</div> : requests.map((request) => <a className="request-row live-request-row" href={`/workspace/requests/${encodeURIComponent(request.id)}`} key={request.id} aria-label={`Open ${request.title}`}>
               <div className="request-main"><span className="request-id">{shortId(request.id)}</span><strong>{request.title}</strong><span className="category">{new Date(request.created_at).toLocaleDateString()}</span></div>
               <div className="bid-count">{request.bid_count} proposals</div>
-              <div className="budget">{request.budget_amount ? `${Number(request.budget_amount).toLocaleString()} ${request.token_id}` : "Budget not set"}</div>
+              <div className="budget">{request.budget_amount ? formatBaseUnits(request.budget_amount, request.token_id) : "Budget not set"}</div>
               <div><span className="status-pill"><i />{statusLabels[request.status] || request.status}</span></div>
               <div className="updated">{new Date(request.created_at).toLocaleDateString()}</div>
             </article>)}
