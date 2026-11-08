@@ -1100,3 +1100,50 @@ html.has-scroll-reveals .public-site .site-reveal.is-revealed { opacity: 1; tran
 .launch-wallet-options { display:grid; gap:10px; width:100%; margin-top:24px; }
 .launch-wallet-options .launch-connect { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; min-height:62px; }
 .launch-wallet-options .launch-connect small { display:block; font-size:11px; line-height:1.4; font-weight:400; opacity:.78; }
+
+
+/* Authenticated procurement workspace */
+.app-shell { --ink:#302832; --muted:#817780; --line:#eee6eb; --paper:#fbf8fa; --teal:#a96f8b; --teal-dark:#302832; }
+.app-shell .brand { color:#302832; }
+.app-shell .brand-mark { display:grid; width:30px; height:30px; place-items:center; border:1px solid #e9c9d7; border-radius:50%; color:#a96f8b; font-family:Georgia,serif; }
+.app-shell .workspace-avatar,.app-shell .profile-avatar { background:#fce4ed; color:#81536a; }
+.app-shell .nav-item.active { background:#fce4ed; color:#70465b; }
+.app-shell .nav-item:hover { background:#fbf0f4; }
+.app-shell .create-button { border:0; cursor:pointer; background:#302832; color:#fff; }
+.app-shell .create-button:hover { background:#574354; }
+.app-shell .create-button:disabled,.app-shell button:disabled { cursor:wait; opacity:.6; }
+.app-shell .network-dot { background:#b58b9e; box-shadow:0 0 0 3px #fce4ed; }
+.app-shell .signal-card { border-color:#eee6eb; }
+.app-shell .status-pill { background:#fceef3; color:#81536a; }
+.app-shell .status-pill i { background:#c27e9d; }
+.app-shell .request-toolbar { display:flex; gap:10px; padding:13px 16px; border-bottom:1px solid #f0e8ed; background:#fff; }
+.app-shell .request-toolbar input,.app-shell .request-toolbar select,.app-shell .procurement-form input,.app-shell .procurement-form textarea,.app-shell .procurement-form select { width:100%; min-width:0; border:1px solid #e8dfe5; border-radius:5px; background:#fff; color:#302832; font:inherit; font-size:12px; outline:none; }
+.app-shell .request-toolbar input { max-width:420px; padding:9px 11px; }
+.app-shell .request-toolbar select { width:190px; padding:9px 11px; }
+.app-shell .procurement-form { display:grid; gap:15px; margin-top:19px; }
+.app-shell .procurement-form label { display:grid; gap:7px; color:#554955; font-size:11px; font-weight:600; }
+.app-shell .procurement-form input,.app-shell .procurement-form textarea,.app-shell .procurement-form select { padding:10px 11px; font-weight:400; resize:vertical; }
+.app-shell .procurement-form input:focus,.app-shell .procurement-form textarea:focus,.app-shell .procurement-form select:focus,.app-shell .request-toolbar input:focus,.app-shell .request-toolbar select:focus { border-color:#c98da8; box-shadow:0 0 0 3px rgb(247 168 196 / 18%); }
+.app-shell .form-two-col { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.app-shell .field-hint { color:#9a8c96; font-size:10px; font-weight:400; }
+.app-shell .form-actions { display:flex; justify-content:flex-end; gap:9px; }
+.app-shell .secondary-button,.app-shell .form-close { min-height:35px; padding:0 13px; border:1px solid #e8dfe5; border-radius:5px; background:#fff; color:#554955; cursor:pointer; font-size:11px; }
+.app-shell .form-close { width:29px; min-height:29px; padding:0; font-size:18px; }
+.app-shell .create-request-panel { margin-top:24px; }
+.app-shell .empty-state { display:grid; min-height:180px; place-content:center; justify-items:center; gap:9px; padding:28px; color:#897d87; text-align:center; font-size:12px; }
+.app-shell .empty-state strong { color:#493d49; font-family:Georgia,serif; font-size:19px; font-weight:400; }
+.app-shell .empty-state p { max-width:430px; margin:0; line-height:1.6; }
+.app-shell .error-state { color:#9b4d68; }
+.app-shell .live-request-row { grid-template-columns:minmax(210px,2fr) minmax(95px,.8fr) minmax(115px,1fr) minmax(140px,1.2fr) minmax(90px,.7fr); }
+.app-shell .refresh-button { border:0; background:transparent; cursor:pointer; }
+.app-shell .workspace-auth { display:flex; align-items:center; gap:10px; }
+.app-shell .workspace-auth button { border:0; background:transparent; color:#806477; cursor:pointer; font-size:10px; }
+.app-shell .auth-account { max-width:180px; overflow:hidden; color:#817780; font-size:10px; text-overflow:ellipsis; }
+.app-shell .auth-live { color:#806477; }
+.app-shell .page-footer { color:#9a8c96; }
+@media(max-width:760px) {
+ .app-shell .request-toolbar { flex-direction:column; }
+ .app-shell .request-toolbar input,.app-shell .request-toolbar select { width:100%; max-width:none; }
+ .app-shell .form-two-col { grid-template-columns:1fr; }
+ .app-shell .live-request-row { min-width:700px; }
+}
