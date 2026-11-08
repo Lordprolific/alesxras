@@ -167,7 +167,7 @@ export function Dashboard() {
               <div className="budget">{request.budget_amount ? formatBaseUnits(request.budget_amount, request.token_id) : "Budget not set"}</div>
               <div><span className="status-pill"><i />{statusLabels[request.status] || request.status}</span></div>
               <div className="updated">{new Date(request.created_at).toLocaleDateString()}</div>
-            </article>)}
+            </a>)}
           </section>
           <footer className="page-footer"><span>Alesxras coordinates. You stay in control.</span><span>Live workspace data · No sample records</span></footer>
         </div>
