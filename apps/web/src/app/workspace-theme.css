@@ -253,3 +253,41 @@
   .profile-dialog { padding:23px 19px; }
 }
 @media(prefers-reduced-motion:reduce) { .profile-dialog-backdrop { backdrop-filter:none; } }
+
+
+/* Agent operations — aligned with the approved native workspace palette. */
+.app-shell .agent-command-panel { margin:28px 0; padding:24px; }
+.app-shell .agent-foundation-tag { align-self:flex-start; padding:7px 10px; border:1px solid #f0dce5; border-radius:999px; background:#fff7fa; color:#8b5d73; font-size:10px; white-space:nowrap; }
+.app-shell .agent-role-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-top:22px; }
+.app-shell .agent-role-card { min-width:0; padding:15px 13px; border:1px solid #eee4e9; border-radius:8px; background:#fdf9fb; }
+.app-shell .agent-role-index { color:#b27b94; font-size:10px; letter-spacing:.12em; }
+.app-shell .agent-role-card h3 { margin:12px 0 7px; color:#302832; font-size:13px; font-weight:600; }
+.app-shell .agent-role-card p { min-height:66px; margin:0; color:#817780; font-size:10px; line-height:1.65; }
+.app-shell .agent-role-card > span:last-child { display:inline-block; margin-top:12px; color:#9a5f7b; font-size:9px; }
+.app-shell .agent-workbench { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,1.1fr); gap:28px; margin-top:24px; padding:20px; border:1px solid #f0e1e9; border-radius:9px; background:#fcf5f8; }
+.app-shell .agent-workbench-copy h3 { margin:5px 0 8px; color:#302832; font-size:17px; font-weight:500; }
+.app-shell .agent-workbench-copy > p:last-child { max-width:420px; margin:0; color:#817780; font-size:11px; line-height:1.7; }
+.app-shell .agent-task-form { display:grid; grid-template-columns:1fr 1fr; align-items:end; gap:12px; }
+.app-shell .agent-task-form label { display:grid; gap:7px; color:#554955; font-size:10px; font-weight:600; }
+.app-shell .agent-task-form select { width:100%; min-height:39px; padding:8px; border:1px solid #e8dfe5; border-radius:5px; background:#fff; color:#51434c; font:inherit; font-size:11px; }
+.app-shell .agent-task-form button { grid-column:1/-1; justify-self:start; min-height:38px; }
+.app-shell .agent-runs-heading { display:flex; align-items:center; justify-content:space-between; margin-top:24px; }
+.app-shell .agent-runs-heading h3 { margin:0; color:#302832; font-size:13px; font-weight:600; }
+.app-shell .agent-runs-heading p { margin:5px 0 0; color:#817780; font-size:10px; }
+.app-shell .agent-run-list { margin-top:10px; border:1px solid #eee4e9; border-radius:7px; overflow:hidden; }
+.app-shell .agent-run-row { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 14px; border-bottom:1px solid #f1eaf0; background:#fff; }
+.app-shell .agent-run-row:last-child { border-bottom:0; }
+.app-shell .agent-run-row > div { display:grid; gap:4px; }
+.app-shell .agent-run-row strong { color:#302832; font-size:11px; text-transform:capitalize; }
+.app-shell .agent-run-row > div span { color:#817780; font-size:9px; }
+.app-shell .agent-run-status { padding:5px 8px; border-radius:999px; background:#f5edf1; color:#786878; font-size:9px; text-transform:capitalize; }
+.app-shell .agent-run-status.queued { background:#fff2df; color:#926b34; }
+.app-shell .agent-run-status.running { background:#fce4ed; color:#89536d; }
+.app-shell .agent-run-status.succeeded { background:#eaf5ed; color:#477653; }
+.app-shell .agent-run-status.failed { background:#fbe9e9; color:#a04d4d; }
+.app-shell .agent-feedback { margin:12px 0 0; font-size:10px; line-height:1.6; }
+.app-shell .agent-feedback.success { color:#477653; }
+.app-shell .agent-feedback.error { color:#a34262; }
+.app-shell .agent-safety-note { margin:13px 0 0; padding-top:12px; border-top:1px solid #f0e6ec; color:#817780; font-size:10px; line-height:1.6; }
+@media(max-width:1050px) { .app-shell .agent-role-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:760px) { .app-shell .agent-command-panel { padding:17px; } .app-shell .agent-role-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .app-shell .agent-workbench { grid-template-columns:1fr; padding:15px; } .app-shell .agent-task-form { grid-template-columns:1fr; } .app-shell .agent-task-form button { grid-column:auto; } }
