@@ -202,7 +202,7 @@ export function Dashboard() {
         <header className="topbar">
           <div className="breadcrumb"><span>{data?.workspace.name || "Workspace"}</span><span className="breadcrumb-slash">/</span><strong>Overview</strong></div>
           <div className="topbar-right">
-            <button className="profile-trigger" type="button" onClick={() => { setSelectedIcon(profile?.avatarIcon || "spark"); setProfileDialogOpen(true); }} disabled={profileLoading}>
+            <button className="profile-trigger" type="button" aria-label="Edit your profile" title="Edit your profile" onClick={() => { setSelectedIcon(profile?.avatarIcon || "spark"); setProfileDialogOpen(true); }} disabled={profileLoading}>
               <span className="profile-trigger-avatar">{profileIcons.find((item) => item.id === profile?.avatarIcon)?.glyph || "✦"}</span>
               <span>{profile?.displayName || "Your profile"}</span>
             </button>
