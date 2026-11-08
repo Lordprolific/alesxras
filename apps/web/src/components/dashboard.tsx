@@ -20,6 +20,23 @@ type WorkspaceData = {
   requests: ProcurementRequest[];
 };
 
+type UserProfile = {
+  accountId: string;
+  displayName: string;
+  avatarIcon: string;
+};
+
+const profileIcons = [
+  { id: "spark", glyph: "✦", label: "Spark" },
+  { id: "orbit", glyph: "◉", label: "Orbit" },
+  { id: "diamond", glyph: "◆", label: "Diamond" },
+  { id: "sun", glyph: "☼", label: "Sun" },
+  { id: "flower", glyph: "❋", label: "Flower" },
+  { id: "leaf", glyph: "❧", label: "Leaf" },
+  { id: "moon", glyph: "☾", label: "Moon" },
+  { id: "wave", glyph: "〰", label: "Wave" },
+];
+
 const statusLabels: Record<string, string> = {
   draft: "Draft",
   open: "Open for proposals",
@@ -50,6 +67,56 @@ export function Dashboard() {
   const [showCreate, setShowCreate] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState("");
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState("spark");
+  const [profileSaving, setProfileSaving] = useState(false);
+
+  async function loadProfile() {
+    setProfileLoading(true);
+    setProfileError("");
+    try {
+      const response = await fetch("/api/workspace/profile", { cache: "no-store" });
+      const result = await response.json() as { profile?: UserProfile; error?: string };
+      if (!response.ok || !result.profile) throw new Error(result.error || "Could not load your profile.");
+      setProfile(result.profile);
+      setSelectedIcon(result.profile.avatarIcon);
+      setProfileDialogOpen(!result.profile.displayName || result.profile.displayName === result.profile.accountId);
+    } catch (cause) {
+      setProfileError(cause instanceof Error ? cause.message : "Could not load your profile.");
+    } finally {
+      setProfileLoading(false);
+    }
+  }
+
+  async function saveProfile(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const displayName = String(form.get("displayName") || "").trim();
+    if (displayName.length < 2 || displayName.length > 40) {
+      setProfileError("Your name must be between 2 and 40 characters.");
+      return;
+    }
+    setProfileSaving(true);
+    setProfileError("");
+    try {
+      const response = await fetch("/api/workspace/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName, avatarIcon: selectedIcon }),
+      });
+      const result = await response.json() as { profile?: UserProfile; error?: string };
+      if (!response.ok || !result.profile) throw new Error(result.error || "Your profile could not be saved.");
+      setProfile(result.profile);
+      setProfileDialogOpen(false);
+    } catch (cause) {
+      setProfileError(cause instanceof Error ? cause.message : "Your profile could not be saved.");
+    } finally {
+      setProfileSaving(false);
+    }
+  }
 
   async function load() {
     setLoading(true);
@@ -67,6 +134,7 @@ export function Dashboard() {
   }
 
   useEffect(() => { void load(); }, []);
+  useEffect(() => { void loadProfile(); }, []);
 
   const requests = useMemo(() => (data?.requests ?? []).filter((item) => {
     const matchesSearch = `${item.title} ${item.description} ${shortId(item.id)}`.toLowerCase().includes(search.toLowerCase());
@@ -123,19 +191,28 @@ export function Dashboard() {
         </nav>
         <div className="sidebar-bottom">
           <div className="network-card"><span className="network-dot pending" /><div><strong>NEAR testnet</strong><span>Human approval required</span></div></div>
-          <div className="profile-row"><div className="profile-avatar">W</div><div className="workspace-name"><strong>Connected wallet</strong><span>{data?.workspace.accountId || "Verifying session"}</span></div></div>
+          <button className="profile-row profile-sidebar-button" type="button" onClick={() => { setSelectedIcon(profile?.avatarIcon || "spark"); setProfileDialogOpen(true); }}>
+            <span className="profile-avatar">{profileIcons.find((item) => item.id === profile?.avatarIcon)?.glyph || "✦"}</span>
+            <span className="workspace-name"><strong>{profile?.displayName || "Set up your profile"}</strong><span>{data?.workspace.accountId || "Verified wallet"}</span></span>
+          </button>
         </div>
       </aside>
 
       <section className="main-panel" id="overview">
         <header className="topbar">
           <div className="breadcrumb"><span>{data?.workspace.name || "Workspace"}</span><span className="breadcrumb-slash">/</span><strong>Overview</strong></div>
-          <div className="topbar-right"><WorkspaceSession /></div>
+          <div className="topbar-right">
+            <button className="profile-trigger" type="button" aria-label="Edit your profile" title="Edit your profile" onClick={() => { setSelectedIcon(profile?.avatarIcon || "spark"); setProfileDialogOpen(true); }} disabled={profileLoading}>
+              <span className="profile-trigger-avatar">{profileIcons.find((item) => item.id === profile?.avatarIcon)?.glyph || "✦"}</span>
+              <span>{profile?.displayName || "Your profile"}</span>
+            </button>
+            <WorkspaceSession />
+          </div>
         </header>
 
         <div className="content-wrap">
           <div className="welcome-row">
-            <div><p className="eyebrow">Procurement workspace</p><h1>Your procurement desk</h1><p className="welcome-copy">Publish a request, review supplier proposals and retain control of every approval.</p></div>
+            <div><p className="eyebrow">Procurement workspace</p><h1>{profile?.displayName ? `Good morning, ${profile.displayName}` : "Your procurement desk"}</h1><p className="welcome-copy">Publish a request, review supplier proposals and retain control of every approval.</p></div>
             <button className="create-button" type="button" onClick={() => setShowCreate((value) => !value)}>＋ New request</button>
           </div>
 
@@ -171,6 +248,36 @@ export function Dashboard() {
           </section>
           <footer className="page-footer"><span>Alesxras coordinates. You stay in control.</span><span>Live workspace data · No sample records</span></footer>
         </div>
+
+        {profileDialogOpen && !profileLoading && <div className="profile-dialog-backdrop" role="presentation">
+          <section className="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-dialog-title">
+            <div className="profile-dialog-heading">
+              <p className="eyebrow">{profile ? "Your account" : "A quick introduction"}</p>
+              <h2 id="profile-dialog-title">{profile ? "Personalize your profile" : "What should we call you?"}</h2>
+              <p>{profile ? "Choose the name and icon that appear across your workspace." : "Let's make this workspace yours. Your name will appear in your dashboard greeting."}</p>
+            </div>
+            <form onSubmit={saveProfile} className="profile-form">
+              <label className="profile-name-field">Your name
+                <input name="displayName" defaultValue={profile?.displayName === profile?.accountId ? "" : profile?.displayName || ""} minLength={2} maxLength={40} autoComplete="name" autoFocus required placeholder="Enter your name" />
+              </label>
+              <fieldset className="profile-icon-field">
+                <legend>Choose your profile icon</legend>
+                <div className="profile-icon-grid">
+                  {profileIcons.map((icon) => <label className={selectedIcon === icon.id ? "profile-icon-option selected" : "profile-icon-option"} key={icon.id}>
+                    <input type="radio" name="avatarIcon" value={icon.id} checked={selectedIcon === icon.id} onChange={() => setSelectedIcon(icon.id)} />
+                    <span aria-hidden="true">{icon.glyph}</span><small>{icon.label}</small>
+                  </label>)}
+                </div>
+              </fieldset>
+              {profileError && <p className="profile-form-error" role="alert">{profileError}</p>}
+              <div className="profile-form-actions">
+                {profile && <button type="button" className="secondary-button" onClick={() => { setProfileError(""); setProfileDialogOpen(false); }}>Cancel</button>}
+                <button type="submit" className="create-button" disabled={profileSaving}>{profileSaving ? "Saving profile…" : profile ? "Save changes" : "Continue to dashboard"}</button>
+              </div>
+            </form>
+          </section>
+        </div>}
+        {profileError && !profileDialogOpen && <p className="profile-load-error" role="alert">{profileError}</p>}
       </section>
     </main>
   );
