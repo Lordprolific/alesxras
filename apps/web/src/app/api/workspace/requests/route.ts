@@ -90,7 +90,7 @@ export async function POST(request: Request) {
 
     if (title.length < 5 || title.length > 120) return NextResponse.json({ error: "Title must be between 5 and 120 characters." }, { status: 400 });
     if (description.length < 20 || description.length > 5000) return NextResponse.json({ error: "Description must be between 20 and 5,000 characters." }, { status: 400 });
-    if (budget !== null && (!/^\\d{1,30}$/.test(budget) || BigInt(budget) <= 0n)) return NextResponse.json({ error: "Budget must be a positive whole number in the selected token's smallest unit." }, { status: 400 });
+    if (budget !== null && (!/^[0-9]{1,30}$/.test(budget) || /^0+$/.test(budget))) return NextResponse.json({ error: "Budget must be a positive whole number in the selected token's smallest unit." }, { status: 400 });
     if (!/^[A-Z0-9._-]{2,20}$/.test(tokenId)) return NextResponse.json({ error: "Enter a valid token symbol." }, { status: 400 });
 
     const userQuery = new URLSearchParams({ select: "id", near_account_id: `eq.${workspace.nearAccountId}`, limit: "1" });
