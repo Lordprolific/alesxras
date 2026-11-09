@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { WorkspaceSession } from "@/components/workspace-session";
+import { MarketplacePanel } from "@/components/marketplace-panel";
 
 type ProcurementRequest = {
   id: string;
@@ -27,6 +28,8 @@ type AgentRun = {
   status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   step_count: number;
   created_at: string;
+  result?: unknown;
+  error_message?: string | null;
 };
 
 type UserProfile = {
@@ -121,7 +124,7 @@ export function Dashboard() {
       });
       const result = await response.json() as { error?: string; run?: AgentRun };
       if (!response.ok || !result.run) throw new Error(result.error || "The agent task could not be recorded.");
-      setAgentMessage("Task recorded in the workspace queue. Execution will begin when the agent worker is connected.");
+      setAgentMessage("Evaluation queued. The report will appear here once the AI Gateway key is configured for this preview.");
       await loadAgentRuns();
     } catch (cause) {
       setAgentError(cause instanceof Error ? cause.message : "The agent task could not be recorded.");
@@ -243,6 +246,7 @@ export function Dashboard() {
         <p className="nav-heading">Workspace</p>
         <nav className="primary-nav" aria-label="Workspace navigation">
           <a className="nav-item active" href="#overview">Overview</a>
+          <a className="nav-item" href="#discover">Discover requests</a>
           <a className="nav-item" href="#agents">Agent operations</a>
           <a className="nav-item" href="#requests">Procurement</a>
           <a className="nav-item" href="#create-request" onClick={() => setShowCreate(true)}>New request</a>
@@ -281,6 +285,8 @@ export function Dashboard() {
             <article className="signal-card network-signal"><div className="signal-label">Network</div><div className="network-status disconnected"><span className="network-dot pending" />NEAR testnet</div><div className="signal-foot">No transaction is submitted automatically</div></article>
           </section>
 
+          <MarketplacePanel />
+
           <section className="activity-panel agent-command-panel" id="agents">
             <div className="panel-heading"><div><p className="eyebrow">Autonomous operations</p><h2>Agent operations</h2><p>Coordinate procurement work through bounded agent tasks, with people retaining approval authority.</p></div><span className="agent-foundation-tag">Orchestration foundation</span></div>
             <div className="agent-role-grid">
@@ -293,7 +299,7 @@ export function Dashboard() {
             <div className="agent-workbench">
               <div className="agent-workbench-copy"><p className="eyebrow">Task orchestration</p><h3>Prepare an agent task</h3><p>Choose the workflow and procurement record. This preview records a bounded task request; it does not call an AI provider, submit a transaction or execute an agent.</p></div>
               <form className="agent-task-form" onSubmit={queueAgentRun}>
-                <label>Agent workflow<select value={agentRunKind} onChange={(event) => setAgentRunKind(event.target.value as AgentRun["kind"])}><option value="evaluate_procurement">Evaluate procurement</option><option value="negotiate_bid">Prepare negotiation</option><option value="verify_transaction">Verify transaction</option></select></label>
+                <label>Agent workflow<select value={agentRunKind} onChange={(event) => setAgentRunKind(event.target.value as AgentRun["kind"])}><option value="evaluate_procurement">Evaluate procurement</option><option value="negotiate_bid" disabled>Prepare negotiation · coming later</option><option value="verify_transaction" disabled>Verify transaction · coming later</option></select></label>
                 <label>Procurement request<select value={agentRequestId} onChange={(event) => setAgentRequestId(event.target.value)} required><option value="">Choose a request</option>{(data?.requests ?? []).map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</select></label>
                 <button className="create-button" type="submit" disabled={agentQueueing || !agentRequestId || !data?.requests.length}>{agentQueueing ? "Recording task…" : "Record agent task"}</button>
               </form>
@@ -301,12 +307,12 @@ export function Dashboard() {
             {agentMessage && <p className="agent-feedback success" role="status">{agentMessage}</p>}
             {agentError && <p className="agent-feedback error" role="alert">{agentError}</p>}
             <div className="agent-runs-heading"><div><h3>Recent agent activity</h3><p>Persisted task records for this workspace</p></div><button className="text-link refresh-button" type="button" onClick={() => void loadAgentRuns()} disabled={agentRunsLoading}>Refresh</button></div>
-            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <div className="agent-run-row" key={run.id}><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>)}</div>
-            <p className="agent-safety-note">Human approval remains mandatory. Autonomous execution is not enabled in this preview because the worker queue and AI provider adapter are not yet connected.</p>
+            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <article className="agent-run-entry" key={run.id}><div className="agent-run-row"><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>{run.result != null && <details className="agent-run-result"><summary>View agent report</summary><pre>{JSON.stringify(run.result, null, 2)}</pre></details>}{run.error_message && <p className="agent-run-error">{run.error_message}</p>}</article>)}</div>
+            <p className="agent-safety-note">The evaluation agent can prepare evidence-based reports when the AI Gateway key is configured. Negotiation and transaction verification remain disabled until secure bid review and NEAR transaction evidence are connected. Human approval is always required.</p>
           </section>
 
           {showCreate && <section className="activity-panel create-request-panel" id="create-request">
-            <div className="panel-heading"><div><h2>Publish a procurement request</h2><p>Describe the Web3 service you need. Suppliers can respond with proposals.</p></div><button type="button" className="form-close" onClick={() => setShowCreate(false)} aria-label="Close form">×</button></div>
+            <div className="panel-heading"><div><h2>Publish a procurement request</h2><p>Publish to the supplier marketplace. Verified workspaces can discover the brief and submit sealed proposals.</p></div><button type="button" className="form-close" onClick={() => setShowCreate(false)} aria-label="Close form">×</button></div>
             <form className="procurement-form" onSubmit={createRequest}>
               <label>Request title<input name="title" minLength={5} maxLength={120} required placeholder="e.g. NEAR smart contract security audit" /></label>
               <label>Project brief<textarea name="description" minLength={20} maxLength={5000} required rows={5} placeholder="Explain the scope, expected deliverables, timeline and any relevant context." /></label>

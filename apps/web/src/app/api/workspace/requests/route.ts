@@ -110,6 +110,7 @@ export async function POST(request: Request) {
         description,
         requirements,
         status: "open",
+        is_public: true,
         budget_amount: budget,
         token_id: tokenId,
         opens_at: new Date().toISOString(),

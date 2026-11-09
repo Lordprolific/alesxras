@@ -1,10 +1,11 @@
 import { createHash } from "node:crypto";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { decodeSessionProof, SESSION_COOKIE } from "@/lib/auth";
 import { ensureWorkspaceForWallet } from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 type AgentKind = "evaluate_procurement" | "negotiate_bid" | "verify_transaction";
 const allowedKinds = new Set<AgentKind>(["evaluate_procurement", "negotiate_bid", "verify_transaction"]);
@@ -42,7 +43,7 @@ export async function GET() {
     const workspace = await workspaceContext();
     if (!workspace) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
     const query = new URLSearchParams({
-      select: "id,procurement_id,kind,status,step_count,created_at,completed_at",
+      select: "id,procurement_id,kind,status,step_count,created_at,completed_at,result,error_message",
       organization_id: `eq.${workspace.organizationId}`,
       order: "created_at.desc",
       limit: "30",
@@ -68,6 +69,7 @@ export async function POST(request: Request) {
     const kind = typeof body.kind === "string" ? body.kind as AgentKind : null;
     const procurementId = typeof body.procurementId === "string" ? body.procurementId : "";
     if (!kind || !allowedKinds.has(kind)) return NextResponse.json({ error: "Choose a supported agent workflow." }, { status: 400 });
+    if (kind !== "evaluate_procurement") return NextResponse.json({ error: "This workflow is not enabled yet. Secure bid review and transaction verification are still being implemented." }, { status: 409 });
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(procurementId)) {
       return NextResponse.json({ error: "Choose a valid procurement request." }, { status: 400 });
     }
@@ -85,12 +87,6 @@ export async function POST(request: Request) {
     if (!procurement) return NextResponse.json({ error: "That request is not available in your workspace." }, { status: 404 });
     if (procurement.status === "cancelled" || procurement.status === "completed") {
       return NextResponse.json({ error: "Agent tasks cannot be started for a cancelled or completed request." }, { status: 409 });
-    }
-    if (kind === "verify_transaction" && !["approved", "executing"].includes(procurement.status)) {
-      return NextResponse.json({ error: "Transaction verification is only available after a request has been approved." }, { status: 409 });
-    }
-    if (kind === "negotiate_bid" && !["evaluating", "negotiating", "awaiting_approval"].includes(procurement.status)) {
-      return NextResponse.json({ error: "Negotiation can only be prepared while a request is being evaluated or negotiated." }, { status: 409 });
     }
 
     const digest = createHash("sha256").update(JSON.stringify({ kind, procurementId, organizationId: workspace.organizationId })).digest("hex");
@@ -114,6 +110,22 @@ export async function POST(request: Request) {
     const rows = await insertResponse.json() as Array<{ id: string; procurement_id: string; kind: AgentKind; status: string; step_count: number; created_at: string }>;
     const run = rows[0];
     if (!run) return NextResponse.json({ error: "The agent task was not returned after creation." }, { status: 502 });
+    const cronSecret = process.env.CRON_SECRET;
+    const deploymentHost = process.env.VERCEL_URL;
+    if (cronSecret && deploymentHost) {
+      after(async () => {
+        try {
+          const workerResponse = await fetch("https://" + deploymentHost + "/api/internal/agent-worker", {
+            method: "GET",
+            headers: { Authorization: "Bearer " + cronSecret },
+            cache: "no-store",
+          });
+          if (!workerResponse.ok) console.error("Agent worker returned HTTP " + workerResponse.status + ": " + (await workerResponse.text()).slice(0, 300));
+        } catch (workerError) {
+          console.error("Agent worker dispatch failed:", workerError);
+        }
+      });
+    }
     return NextResponse.json({ run }, { status: 201 });
   } catch (error) {
     console.error("Agent runs POST failed:", error);
