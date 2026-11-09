@@ -128,7 +128,7 @@ export async function POST(request: Request) {
     // a background after() callback is skipped or its invocation fails.
     let workerResponse: Response;
     try {
-      workerResponse = await fetch("https://" + deploymentHost.replace(/^https?:\\/\\//, "") + "/api/internal/agent-worker", {
+      workerResponse = await fetch("https://" + deploymentHost.replace("https://", "").replace("http://", "") + "/api/internal/agent-worker", {
         method: "GET",
         headers: { Authorization: "Bearer " + cronSecret },
         cache: "no-store",
