@@ -124,7 +124,7 @@ export function Dashboard() {
       });
       const result = await response.json() as { error?: string; run?: AgentRun };
       if (!response.ok || !result.run) throw new Error(result.error || "The agent task could not be recorded.");
-      setAgentMessage("Task recorded in the workspace queue. Execution will begin when the agent worker is connected.");
+      setAgentMessage("Evaluation queued. The report will appear here once the AI Gateway key is configured for this preview.");
       await loadAgentRuns();
     } catch (cause) {
       setAgentError(cause instanceof Error ? cause.message : "The agent task could not be recorded.");
@@ -312,7 +312,7 @@ export function Dashboard() {
           </section>
 
           {showCreate && <section className="activity-panel create-request-panel" id="create-request">
-            <div className="panel-heading"><div><h2>Publish a procurement request</h2><p>Describe the Web3 service you need. Suppliers can respond with proposals.</p></div><button type="button" className="form-close" onClick={() => setShowCreate(false)} aria-label="Close form">×</button></div>
+            <div className="panel-heading"><div><h2>Publish a procurement request</h2><p>Publish to the supplier marketplace. Verified workspaces can discover the brief and submit sealed proposals.</p></div><button type="button" className="form-close" onClick={() => setShowCreate(false)} aria-label="Close form">×</button></div>
             <form className="procurement-form" onSubmit={createRequest}>
               <label>Request title<input name="title" minLength={5} maxLength={120} required placeholder="e.g. NEAR smart contract security audit" /></label>
               <label>Project brief<textarea name="description" minLength={20} maxLength={5000} required rows={5} placeholder="Explain the scope, expected deliverables, timeline and any relevant context." /></label>
