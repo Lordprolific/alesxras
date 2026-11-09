@@ -5,6 +5,7 @@ import { decodeSessionProof, SESSION_COOKIE } from "@/lib/auth";
 import { ensureWorkspaceForWallet } from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 type AgentKind = "evaluate_procurement" | "negotiate_bid" | "verify_transaction";
 const allowedKinds = new Set<AgentKind>(["evaluate_procurement", "negotiate_bid", "verify_transaction"]);
@@ -120,11 +121,12 @@ export async function POST(request: Request) {
     if (cronSecret && deploymentHost) {
       after(async () => {
         try {
-          await fetch("https://" + deploymentHost + "/api/internal/agent-worker", {
+          const workerResponse = await fetch("https://" + deploymentHost + "/api/internal/agent-worker", {
             method: "GET",
             headers: { Authorization: "Bearer " + cronSecret },
             cache: "no-store",
           });
+          if (!workerResponse.ok) console.error("Agent worker returned HTTP " + workerResponse.status + ": " + (await workerResponse.text()).slice(0, 300));
         } catch (workerError) {
           console.error("Agent worker dispatch failed:", workerError);
         }
