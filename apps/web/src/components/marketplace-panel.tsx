@@ -7,7 +7,7 @@ type PublicRequest = {
   budget_amount: string | null; token_id: string; closes_at: string | null; buyerOrganization: string;
 };
 type OwnBid = {
-  id: string; status: string; submittedAt: string | null; tokenId: string;
+  id: string; procurementId: string; buyerOrganizationId: string; status: string; submittedAt: string | null; tokenId: string;
   requestTitle: string; buyerWorkspace: string; closesAt: string | null;
 };
 
@@ -73,7 +73,7 @@ export function MarketplacePanel() {
       <div className="marketplace-opportunities">
         {loading ? <p className="empty-state">Loading public opportunities…</p> : requests.length === 0 ? <div className="empty-state"><strong>No public requests yet</strong><p>When buyers publish opportunities, they will appear here.</p></div> : requests.map((item) => {
           const draft = drafts[item.id] || { amount: "", proposal: "" };
-          const alreadyBid = bids.some((bid) => bid.requestTitle === item.title && bid.buyerWorkspace === item.buyerOrganization);
+          const alreadyBid = bids.some((bid) => bid.procurementId === item.id);
           return <article className="marketplace-request" key={item.id}>
             <div className="marketplace-request-top"><span>{item.buyerOrganization}</span><span>{date(item.closes_at)}</span></div>
             <h3>{item.title}</h3><p>{item.description}</p>
