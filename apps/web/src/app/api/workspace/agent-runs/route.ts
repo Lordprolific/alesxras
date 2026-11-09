@@ -42,7 +42,7 @@ export async function GET() {
     const workspace = await workspaceContext();
     if (!workspace) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
     const query = new URLSearchParams({
-      select: "id,procurement_id,kind,status,step_count,created_at,completed_at",
+      select: "id,procurement_id,kind,status,step_count,created_at,completed_at,result,error_message",
       organization_id: `eq.${workspace.organizationId}`,
       order: "created_at.desc",
       limit: "30",
