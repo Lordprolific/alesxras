@@ -111,6 +111,7 @@ export async function POST(request: Request) {
     const run = rows[0];
     if (!run) return NextResponse.json({ error: "The agent task was not returned after creation." }, { status: 502 });
     const cronSecret = process.env.CRON_SECRET;
+    const protectionBypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
     const deploymentHost = process.env.VERCEL_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL;
     if (!cronSecret || !deploymentHost) {
       const message = !cronSecret
@@ -130,20 +131,36 @@ export async function POST(request: Request) {
     try {
       workerResponse = await fetch("https://" + deploymentHost.replace("https://", "").replace("http://", "") + "/api/internal/agent-worker", {
         method: "GET",
-        headers: { Authorization: "Bearer " + cronSecret },
+        headers: {
+          Authorization: "Bearer " + cronSecret,
+          ...(protectionBypassSecret
+            ? { "x-vercel-protection-bypass": protectionBypassSecret }
+            : {}),
+        },
         cache: "no-store",
         signal: AbortSignal.timeout(50_000),
       });
     } catch (dispatchError) {
       const message = dispatchError instanceof Error ? dispatchError.message : "The agent worker could not be reached.";
       console.error("Agent worker dispatch failed:", dispatchError);
+      await db("agent_runs?id=eq." + run.id + "&organization_id=eq." + workspace.organizationId, {
+        method: "PATCH",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({ status: "failed", error_message: ("Worker dispatch failed: " + message).slice(0, 500), completed_at: new Date().toISOString() }),
+      });
       return NextResponse.json({ error: "The task was recorded but the worker could not be reached: " + message, runId: run.id }, { status: 502 });
     }
 
     const workerBody = await workerResponse.json().catch(() => null) as { status?: string; error?: string; message?: string } | null;
     if (!workerResponse.ok) {
       console.error("Agent worker returned HTTP " + workerResponse.status + ":", workerBody);
-      return NextResponse.json({ error: workerBody?.error || "The agent worker rejected the task.", runId: run.id }, { status: 502 });
+      const dispatchMessage = workerBody?.error || "The agent worker rejected the task (HTTP " + workerResponse.status + ").";
+      await db("agent_runs?id=eq." + run.id + "&organization_id=eq." + workspace.organizationId, {
+        method: "PATCH",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({ status: "failed", error_message: dispatchMessage.slice(0, 500), completed_at: new Date().toISOString() }),
+      });
+      return NextResponse.json({ error: dispatchMessage, runId: run.id }, { status: 502 });
     }
 
     const refreshedResponse = await db("agent_runs?id=eq." + run.id + "&organization_id=eq." + workspace.organizationId + "&select=id,procurement_id,kind,status,step_count,created_at,completed_at,result,error_message,provider,model", {
