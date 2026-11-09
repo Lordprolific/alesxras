@@ -238,7 +238,7 @@ export function Dashboard() {
   return (
     <main className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#overview"><span className="brand-mark" aria-hidden="true">A</span><span>alesxras</span></a>
+        <a className="brand" href="#overview"><svg className="brand-mark" aria-hidden="true" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block", border: 0, borderRadius: 0 }}><path d="M18 3 31 10.5v15L18 33 5 25.5v-15L18 3Z" fill="none" stroke="currentColor" strokeWidth="1.4"/><path d="M18 10v16M10.5 14.25l15 8.5M25.5 14.25l-15 8.5" fill="none" stroke="currentColor" strokeWidth="1.4"/><circle cx="18" cy="18" r="2.7" fill="currentColor"/></svg><span>alesxras</span></a>
         <div className="workspace-switcher">
           <div className="workspace-avatar">{data?.workspace.name.slice(0, 1).toUpperCase() || "A"}</div>
           <div className="workspace-name"><strong>{data?.workspace.name || "Your workspace"}</strong><span>{data?.workspace.role || "Procurement workspace"}</span></div>
