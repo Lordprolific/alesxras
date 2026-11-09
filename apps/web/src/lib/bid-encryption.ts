@@ -22,7 +22,7 @@ export function encryptBidValue(value: string, associatedData: string) {
 }
 
 export function decryptBidValue(ciphertextValue: string, nonceValue: string, associatedData: string) {
-  const ciphertext = Buffer.from(ciphertextValue.replace(/^\\\\x/, ""), "hex");
+  const ciphertext = Buffer.from(ciphertextValue.replace(/^\\x/, ""), "hex");
   const nonce = Buffer.from(nonceValue.replace(/^\\\\x/, ""), "hex");
   if (nonce.length !== 12 || ciphertext.length < 17) throw new Error("Encrypted bid payload is malformed.");
   const authTag = ciphertext.subarray(ciphertext.length - 16);
