@@ -9,6 +9,15 @@ function encryptionKey() {
   return Buffer.from(value, "hex");
 }
 
+function decodeBytea(value: string) {
+  // PostgreSQL bytea values are serialized by PostgREST as \x followed by hex.
+  const hex = value.replace(/^\\x/i, "");
+  if (!hex || hex.length % 2 !== 0 || !/^[0-9a-f]+$/i.test(hex)) {
+    throw new Error("Encrypted bid payload is malformed.");
+  }
+  return Buffer.from(hex, "hex");
+}
+
 export function encryptBidValue(value: string, associatedData: string) {
   const nonce = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", encryptionKey(), nonce);
@@ -22,8 +31,8 @@ export function encryptBidValue(value: string, associatedData: string) {
 }
 
 export function decryptBidValue(ciphertextValue: string, nonceValue: string, associatedData: string) {
-  const ciphertext = Buffer.from(ciphertextValue.replace(/^\\x/, ""), "hex");
-  const nonce = Buffer.from(nonceValue.replace(/^\\\\x/, ""), "hex");
+  const ciphertext = decodeBytea(ciphertextValue);
+  const nonce = decodeBytea(nonceValue);
   if (nonce.length !== 12 || ciphertext.length < 17) throw new Error("Encrypted bid payload is malformed.");
   const authTag = ciphertext.subarray(ciphertext.length - 16);
   const encrypted = ciphertext.subarray(0, ciphertext.length - 16);
