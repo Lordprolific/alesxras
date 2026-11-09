@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 
 type Detail = {
@@ -32,7 +32,7 @@ export function ProcurementRequestDetail({ id }: { id: string }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true); setError("");
     try {
       const response = await fetch(`/api/workspace/requests/${encodeURIComponent(id)}`, { cache: "no-store" });
@@ -42,9 +42,9 @@ export function ProcurementRequestDetail({ id }: { id: string }) {
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not load request.");
     } finally { setLoading(false); }
-  }
+  }, [id]);
 
-  useEffect(() => { void load(); }, [id]);
+  useEffect(() => { void load(); }, [load]);
 
   if (loading) return <main className="detail-shell"><p className="detail-muted">Loading procurement record…</p></main>;
   if (error || !detail) return <main className="detail-shell"><Link className="detail-back" href="/workspace">← Workspace</Link><section className="detail-panel"><h1>Request unavailable</h1><p>{error || "This request could not be found."}</p><button className="secondary-button" onClick={() => void load()}>Try again</button></section></main>;
