@@ -88,12 +88,6 @@ export async function POST(request: Request) {
     if (procurement.status === "cancelled" || procurement.status === "completed") {
       return NextResponse.json({ error: "Agent tasks cannot be started for a cancelled or completed request." }, { status: 409 });
     }
-    if (kind === "verify_transaction" && !["approved", "executing"].includes(procurement.status)) {
-      return NextResponse.json({ error: "Transaction verification is only available after a request has been approved." }, { status: 409 });
-    }
-    if (kind === "negotiate_bid" && !["evaluating", "negotiating", "awaiting_approval"].includes(procurement.status)) {
-      return NextResponse.json({ error: "Negotiation can only be prepared while a request is being evaluated or negotiated." }, { status: 409 });
-    }
 
     const digest = createHash("sha256").update(JSON.stringify({ kind, procurementId, organizationId: workspace.organizationId })).digest("hex");
     const insertResponse = await db("agent_runs", {
