@@ -100,7 +100,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       organization_id: "eq." + procurement.organization_id,
       supplier_organization_id: "eq." + workspace.organizationId,
       procurement_id: "eq." + id,
-      supplier_id: "eq." + supplier.id,
       limit: "1",
     });
     const existingResponse = await db("bids?" + existingQuery.toString());
@@ -133,7 +132,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     if (!insert.ok) {
       const detail = await insert.text();
       console.error("Marketplace bid insert failed:", detail);
-      if (detail.includes("bids_procurement_id_supplier_id_key")) {
+      if (detail.includes("bids_one_submission_per_supplier_workspace_idx") || detail.includes("bids_procurement_id_supplier_id_key")) {
         return NextResponse.json({ error: "Your workspace has already submitted a proposal for this request." }, { status: 409 });
       }
       return NextResponse.json({ error: "Your proposal could not be submitted." }, { status: 502 });
