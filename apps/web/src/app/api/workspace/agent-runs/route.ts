@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { after, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { decodeSessionProof, SESSION_COOKIE } from "@/lib/auth";
 import { ensureWorkspaceForWallet } from "@/lib/supabase-admin";
