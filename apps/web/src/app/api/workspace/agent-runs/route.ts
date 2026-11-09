@@ -68,6 +68,7 @@ export async function POST(request: Request) {
     const kind = typeof body.kind === "string" ? body.kind as AgentKind : null;
     const procurementId = typeof body.procurementId === "string" ? body.procurementId : "";
     if (!kind || !allowedKinds.has(kind)) return NextResponse.json({ error: "Choose a supported agent workflow." }, { status: 400 });
+    if (kind !== "evaluate_procurement") return NextResponse.json({ error: "This workflow is not enabled yet. Secure bid review and transaction verification are still being implemented." }, { status: 409 });
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(procurementId)) {
       return NextResponse.json({ error: "Choose a valid procurement request." }, { status: 400 });
     }
