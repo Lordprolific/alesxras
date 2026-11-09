@@ -48,6 +48,8 @@ export async function GET() {
     return NextResponse.json({
       bids: bids.map((bid) => ({
         id: bid.id,
+        procurementId: bid.procurement_id,
+        buyerOrganizationId: bid.organization_id,
         status: bid.status,
         submittedAt: bid.submitted_at,
         tokenId: bid.token_id,
