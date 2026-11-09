@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { WorkspaceSession } from "@/components/workspace-session";
+import { MarketplacePanel } from "@/components/marketplace-panel";
 
 type ProcurementRequest = {
   id: string;
@@ -243,6 +244,7 @@ export function Dashboard() {
         <p className="nav-heading">Workspace</p>
         <nav className="primary-nav" aria-label="Workspace navigation">
           <a className="nav-item active" href="#overview">Overview</a>
+          <a className="nav-item" href="#discover">Discover requests</a>
           <a className="nav-item" href="#agents">Agent operations</a>
           <a className="nav-item" href="#requests">Procurement</a>
           <a className="nav-item" href="#create-request" onClick={() => setShowCreate(true)}>New request</a>
@@ -280,6 +282,8 @@ export function Dashboard() {
             <article className="signal-card"><div className="signal-label">Awaiting approval</div><div className="signal-value">{approvalCount}</div><div className="signal-foot">Requires an explicit human decision</div></article>
             <article className="signal-card network-signal"><div className="signal-label">Network</div><div className="network-status disconnected"><span className="network-dot pending" />NEAR testnet</div><div className="signal-foot">No transaction is submitted automatically</div></article>
           </section>
+
+          <MarketplacePanel />
 
           <section className="activity-panel agent-command-panel" id="agents">
             <div className="panel-heading"><div><p className="eyebrow">Autonomous operations</p><h2>Agent operations</h2><p>Coordinate procurement work through bounded agent tasks, with people retaining approval authority.</p></div><span className="agent-foundation-tag">Orchestration foundation</span></div>
