@@ -28,6 +28,8 @@ type AgentRun = {
   status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   step_count: number;
   created_at: string;
+  result?: unknown;
+  error_message?: string | null;
 };
 
 type UserProfile = {
@@ -305,8 +307,8 @@ export function Dashboard() {
             {agentMessage && <p className="agent-feedback success" role="status">{agentMessage}</p>}
             {agentError && <p className="agent-feedback error" role="alert">{agentError}</p>}
             <div className="agent-runs-heading"><div><h3>Recent agent activity</h3><p>Persisted task records for this workspace</p></div><button className="text-link refresh-button" type="button" onClick={() => void loadAgentRuns()} disabled={agentRunsLoading}>Refresh</button></div>
-            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <div className="agent-run-row" key={run.id}><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>)}</div>
-            <p className="agent-safety-note">Human approval remains mandatory. Autonomous execution is not enabled in this preview because the worker queue and AI provider adapter are not yet connected.</p>
+            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <article className="agent-run-entry" key={run.id}><div className="agent-run-row"><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>{run.result && <details className="agent-run-result"><summary>View agent report</summary><pre>{JSON.stringify(run.result, null, 2)}</pre></details>}{run.error_message && <p className="agent-run-error">{run.error_message}</p>}</article>)}</div>
+            <p className="agent-safety-note">The evaluation agent can prepare evidence-based reports when the AI Gateway key is configured. Negotiation and transaction verification remain disabled until secure bid review and NEAR transaction evidence are connected. Human approval is always required.</p>
           </section>
 
           {showCreate && <section className="activity-panel create-request-panel" id="create-request">
