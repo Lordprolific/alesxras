@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type PublicRequest = {
   id: string; title: string; description: string; requirements: string[];
@@ -26,7 +26,7 @@ export function MarketplacePanel() {
   const [submitting, setSubmitting] = useState<string | null>(null);
   const [message, setMessage] = useState("");
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true); setError("");
     try {
       const responses = await Promise.all([
@@ -43,9 +43,9 @@ export function MarketplacePanel() {
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not load the marketplace.");
     } finally { setLoading(false); }
-  }
+  }, []);
 
-  useEffect(() => { void load(); }, []);
+  useEffect(() => { void load(); }, [load]);
 
   async function submit(requestId: string) {
     const draft = drafts[requestId];
