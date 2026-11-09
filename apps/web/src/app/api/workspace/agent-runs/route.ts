@@ -111,22 +111,47 @@ export async function POST(request: Request) {
     const run = rows[0];
     if (!run) return NextResponse.json({ error: "The agent task was not returned after creation." }, { status: 502 });
     const cronSecret = process.env.CRON_SECRET;
-    const deploymentHost = process.env.VERCEL_URL;
-    if (cronSecret && deploymentHost) {
-      after(async () => {
-        try {
-          const workerResponse = await fetch("https://" + deploymentHost + "/api/internal/agent-worker", {
-            method: "GET",
-            headers: { Authorization: "Bearer " + cronSecret },
-            cache: "no-store",
-          });
-          if (!workerResponse.ok) console.error("Agent worker returned HTTP " + workerResponse.status + ": " + (await workerResponse.text()).slice(0, 300));
-        } catch (workerError) {
-          console.error("Agent worker dispatch failed:", workerError);
-        }
+    const deploymentHost = process.env.VERCEL_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL;
+    if (!cronSecret || !deploymentHost) {
+      const message = !cronSecret
+        ? "Agent worker is not configured: CRON_SECRET is missing from this deployment."
+        : "Agent worker is not configured: no Vercel deployment URL is available.";
+      await db("agent_runs?id=eq." + run.id + "&organization_id=eq." + workspace.organizationId, {
+        method: "PATCH",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({ status: "failed", error_message: message, completed_at: new Date().toISOString() }),
       });
+      return NextResponse.json({ error: message, runId: run.id }, { status: 503 });
     }
-    return NextResponse.json({ run }, { status: 201 });
+
+    // Dispatch before returning so a task cannot silently remain queued when
+    // a background after() callback is skipped or its invocation fails.
+    let workerResponse: Response;
+    try {
+      workerResponse = await fetch("https://" + deploymentHost.replace(/^https?:\\/\\//, "") + "/api/internal/agent-worker", {
+        method: "GET",
+        headers: { Authorization: "Bearer " + cronSecret },
+        cache: "no-store",
+        signal: AbortSignal.timeout(50_000),
+      });
+    } catch (dispatchError) {
+      const message = dispatchError instanceof Error ? dispatchError.message : "The agent worker could not be reached.";
+      console.error("Agent worker dispatch failed:", dispatchError);
+      return NextResponse.json({ error: "The task was recorded but the worker could not be reached: " + message, runId: run.id }, { status: 502 });
+    }
+
+    const workerBody = await workerResponse.json().catch(() => null) as { status?: string; error?: string; message?: string } | null;
+    if (!workerResponse.ok) {
+      console.error("Agent worker returned HTTP " + workerResponse.status + ":", workerBody);
+      return NextResponse.json({ error: workerBody?.error || "The agent worker rejected the task.", runId: run.id }, { status: 502 });
+    }
+
+    const refreshedResponse = await db("agent_runs?id=eq." + run.id + "&organization_id=eq." + workspace.organizationId + "&select=id,procurement_id,kind,status,step_count,created_at,completed_at,result,error_message,provider,model", {
+      headers: { Prefer: "return=representation" },
+    });
+    const refreshedRows = refreshedResponse.ok ? await refreshedResponse.json() as Array<Record<string, unknown>> : [];
+    const refreshedRun = refreshedRows[0] || run;
+    return NextResponse.json({ run: refreshedRun, worker: workerBody }, { status: 201 });
   } catch (error) {
     console.error("Agent runs POST failed:", error);
     return NextResponse.json({ error: "Unable to record the agent task right now." }, { status: 500 });
