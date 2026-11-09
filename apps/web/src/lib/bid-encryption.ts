@@ -9,21 +9,31 @@ function encryptionKey() {
   return Buffer.from(value, "hex");
 }
 
+function decodeBytea(value: string) {
+  // PostgREST serializes PostgreSQL bytea values as a single leading \\x
+  // followed by hex. Decode ciphertext and nonce through the same path.
+  const hex = value.replace(/^\\\\x/i, "");
+  if (!hex || hex.length % 2 !== 0 || !/^[0-9a-f]+$/i.test(hex)) {
+    throw new Error("Encrypted bid payload is malformed.");
+  }
+  return Buffer.from(hex, "hex");
+}
+
 export function encryptBidValue(value: string, associatedData: string) {
   const nonce = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", encryptionKey(), nonce);
   cipher.setAAD(Buffer.from(associatedData, "utf8"));
   const encrypted = Buffer.concat([cipher.update(value, "utf8"), cipher.final(), cipher.getAuthTag()]);
   return {
-    ciphertext: "\\x" + encrypted.toString("hex"),
-    nonce: "\\x" + nonce.toString("hex"),
+    ciphertext: "\\\\x" + encrypted.toString("hex"),
+    nonce: "\\\\x" + nonce.toString("hex"),
     keyVersion: KEY_VERSION,
   };
 }
 
 export function decryptBidValue(ciphertextValue: string, nonceValue: string, associatedData: string) {
-  const ciphertext = Buffer.from(ciphertextValue.replace(/^\\x/, ""), "hex");
-  const nonce = Buffer.from(nonceValue.replace(/^\\\\x/, ""), "hex");
+  const ciphertext = decodeBytea(ciphertextValue);
+  const nonce = decodeBytea(nonceValue);
   if (nonce.length !== 12 || ciphertext.length < 17) throw new Error("Encrypted bid payload is malformed.");
   const authTag = ciphertext.subarray(ciphertext.length - 16);
   const encrypted = ciphertext.subarray(0, ciphertext.length - 16);
