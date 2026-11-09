@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { decodeSessionProof, SESSION_COOKIE } from "@/lib/auth";
 import { ensureWorkspaceForWallet } from "@/lib/supabase-admin";
@@ -115,6 +115,21 @@ export async function POST(request: Request) {
     const rows = await insertResponse.json() as Array<{ id: string; procurement_id: string; kind: AgentKind; status: string; step_count: number; created_at: string }>;
     const run = rows[0];
     if (!run) return NextResponse.json({ error: "The agent task was not returned after creation." }, { status: 502 });
+    const cronSecret = process.env.CRON_SECRET;
+    const deploymentHost = process.env.VERCEL_URL;
+    if (cronSecret && deploymentHost) {
+      after(async () => {
+        try {
+          await fetch("https://" + deploymentHost + "/api/internal/agent-worker", {
+            method: "GET",
+            headers: { Authorization: "Bearer " + cronSecret },
+            cache: "no-store",
+          });
+        } catch (workerError) {
+          console.error("Agent worker dispatch failed:", workerError);
+        }
+      });
+    }
     return NextResponse.json({ run }, { status: 201 });
   } catch (error) {
     console.error("Agent runs POST failed:", error);
