@@ -299,7 +299,7 @@ export function Dashboard() {
             <div className="agent-workbench">
               <div className="agent-workbench-copy"><p className="eyebrow">Task orchestration</p><h3>Prepare an agent task</h3><p>Choose the workflow and procurement record. This preview records a bounded task request; it does not call an AI provider, submit a transaction or execute an agent.</p></div>
               <form className="agent-task-form" onSubmit={queueAgentRun}>
-                <label>Agent workflow<select value={agentRunKind} onChange={(event) => setAgentRunKind(event.target.value as AgentRun["kind"])}><option value="evaluate_procurement">Evaluate procurement</option><option value="negotiate_bid">Prepare negotiation</option><option value="verify_transaction">Verify transaction</option></select></label>
+                <label>Agent workflow<select value={agentRunKind} onChange={(event) => setAgentRunKind(event.target.value as AgentRun["kind"])}><option value="evaluate_procurement">Evaluate procurement</option><option value="negotiate_bid" disabled>Prepare negotiation · coming later</option><option value="verify_transaction" disabled>Verify transaction · coming later</option></select></label>
                 <label>Procurement request<select value={agentRequestId} onChange={(event) => setAgentRequestId(event.target.value)} required><option value="">Choose a request</option>{(data?.requests ?? []).map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</select></label>
                 <button className="create-button" type="submit" disabled={agentQueueing || !agentRequestId || !data?.requests.length}>{agentQueueing ? "Recording task…" : "Record agent task"}</button>
               </form>
