@@ -101,7 +101,7 @@ export async function POST(request: Request) {
     if (protectionBypassSecret) headers["x-vercel-protection-bypass"] = protectionBypassSecret;
     let workerResponse: Response;
     try {
-      workerResponse = await fetch(`https://${deploymentHost.replace(/^https?:\\/\\//, "")}/api/internal/agent-worker`, { method: "GET", headers, cache: "no-store", signal: AbortSignal.timeout(50_000) });
+      workerResponse = await fetch(`https://${deploymentHost.replace("https://", "").replace("http://", "")}/api/internal/agent-worker`, { method: "GET", headers, cache: "no-store", signal: AbortSignal.timeout(50_000) });
     } catch (error) {
       const message = error instanceof Error ? error.message : "The agent worker could not be reached.";
       await db(`agent_runs?id=eq.${run.id}&organization_id=eq.${workspace.organizationId}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ status: "failed", error_message: (`Worker dispatch failed: ${message}`).slice(0, 500), completed_at: new Date().toISOString() }) });
