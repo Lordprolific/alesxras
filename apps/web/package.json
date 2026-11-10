@@ -13,12 +13,13 @@
   "dependencies": {
     "@alesxras/domain": "*",
     "@near-wallet-selector/core": "10.1.4",
+    "@near-wallet-selector/meteor-wallet": "10.1.4",
     "@near-wallet-selector/my-near-wallet": "10.1.4",
+    "@near-wallet-selector/sender": "10.1.4",
+    "@vercel/analytics": "^2.0.1",
     "next": "15.5.28",
     "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "@near-wallet-selector/meteor-wallet": "10.1.4",
-    "@near-wallet-selector/sender": "10.1.4"
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
