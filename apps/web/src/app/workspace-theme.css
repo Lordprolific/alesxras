@@ -330,3 +330,39 @@
 .agent-run-error { margin:0; padding:0 14px 12px; color:#a34262; font-size:10px; line-height:1.5; }
 @media(max-width:900px) { .marketplace-grid { grid-template-columns:1fr; } }
 @media(max-width:760px) { .marketplace-panel { padding:16px; } .marketplace-heading { align-items:center; } .marketplace-request-top,.marketplace-request-meta { flex-wrap:wrap; } }
+
+
+/* Readable, human-first procurement evaluation reports. */
+.app-shell .evaluation-report { padding:0 16px 16px; }
+.app-shell .evaluation-report > summary { display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border:1px solid #efdce5; border-radius:6px; background:#fff8fb; color:#89536d; font-size:10px; font-weight:600; cursor:pointer; list-style:none; }
+.app-shell .evaluation-report > summary::-webkit-details-marker { display:none; }
+.app-shell .evaluation-report > summary::after { content:"＋"; font-size:13px; }
+.app-shell .evaluation-report[open] > summary::after { content:"−"; }
+.app-shell .evaluation-report-body { display:grid; gap:18px; max-width:900px; padding-top:16px; }
+.app-shell .evaluation-summary { padding:19px 20px; border:1px solid #f0e1e9; border-radius:9px; background:linear-gradient(135deg,#fff8fb,#fcf5f8); }
+.app-shell .evaluation-section-label { display:block; color:#a16f87; font-size:9px; font-weight:700; letter-spacing:.13em; line-height:1.5; }
+.app-shell .evaluation-summary h4,.app-shell .evaluation-section h4 { margin:5px 0 8px; color:#302832; font-size:14px; font-weight:600; }
+.app-shell .evaluation-summary p,.app-shell .evaluation-section p { margin:0; color:#6f626d; font-size:11px; line-height:1.75; }
+.app-shell .evaluation-section { display:grid; gap:10px; }
+.app-shell .evaluation-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.app-shell .evaluation-section-heading h4 { margin-bottom:0; }
+.app-shell .evaluation-count { padding:5px 8px; border-radius:999px; background:#f6edf1; color:#8b6177; font-size:9px; white-space:nowrap; }
+.app-shell .evaluation-risk-list,.app-shell .evaluation-criteria-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.app-shell .evaluation-risk-card,.app-shell .evaluation-criteria-list article { min-width:0; padding:13px 14px; border:1px solid #eee4e9; border-left:3px solid #c9a2b4; border-radius:7px; background:#fff; }
+.app-shell .evaluation-risk-card.severity-high { border-left-color:#c46c7c; }
+.app-shell .evaluation-risk-card.severity-medium { border-left-color:#d4a15e; }
+.app-shell .evaluation-risk-card.severity-low { border-left-color:#83a88a; }
+.app-shell .evaluation-risk-severity { display:inline-block; margin-bottom:8px; color:#8a6577; font-size:9px; font-weight:700; }
+.app-shell .evaluation-risk-card.severity-high .evaluation-risk-severity { color:#a64f61; }
+.app-shell .evaluation-risk-card.severity-medium .evaluation-risk-severity { color:#98703a; }
+.app-shell .evaluation-risk-card.severity-low .evaluation-risk-severity { color:#557e5d; }
+.app-shell .evaluation-risk-card p,.app-shell .evaluation-criteria-list p { color:#716571; font-size:10px; line-height:1.7; }
+.app-shell .evaluation-checklist { display:grid; gap:8px; margin:0; padding:0; list-style:none; }
+.app-shell .evaluation-checklist li { display:flex; align-items:flex-start; gap:9px; padding:10px 12px; border:1px solid #eee7eb; border-radius:6px; background:#fff; color:#625562; font-size:10px; line-height:1.6; }
+.app-shell .evaluation-checklist li span { color:#bd7f9a; font-size:14px; line-height:1.2; }
+.app-shell .evaluation-next-steps { display:grid; gap:8px; margin:0; padding:0; list-style:none; }
+.app-shell .evaluation-next-steps li { display:flex; align-items:flex-start; gap:12px; padding:11px 13px; border:1px solid #eee7eb; border-radius:6px; background:#fff; }
+.app-shell .evaluation-next-steps li > span { color:#b27b94; font-size:10px; font-weight:700; letter-spacing:.08em; }
+.app-shell .evaluation-next-steps li p { color:#625562; }
+.app-shell .evaluation-criteria-list article strong { display:block; margin-bottom:6px; color:#493b49; font-size:11px; }
+@media(max-width:650px) { .app-shell .evaluation-risk-list,.app-shell .evaluation-criteria-list { grid-template-columns:1fr; } .app-shell .evaluation-report { padding-right:10px; padding-left:10px; } .app-shell .evaluation-summary { padding:15px; } }
