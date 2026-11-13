@@ -84,3 +84,30 @@ The current official hackathon page states that the build period ends **14 Novem
 ## Demo narration — safe wording
 
 “Alesxras is a privacy-first procurement workspace. Buyers publish sourcing requests, suppliers submit sealed proposals, and bounded AI agents help evaluate procurement evidence and prepare negotiation plans. Human approval remains separate from agent analysis. The current prototype verifies recorded NEAR transaction evidence, while live payment signing and autonomous settlement remain future implementation work.”
+
+
+## NEAR ecosystem documentation reviewed
+
+These are the relevant technical references reviewed for this project:
+
+- [NEAR AI Cloud documentation](https://docs.near.ai/) — OpenAI-compatible inference at `https://cloud-api.near.ai/v1`, API key required, with response/deployment verification guidance. Alesxras currently uses Google Gemini directly, so NEAR AI Cloud is a genuine missing integration if we want to demonstrate this hackathon component.
+- [NEAR AI Cloud verification](https://docs.near.ai/cloud/verification) — important if adopting the Cloud: verify attestation and signed response evidence rather than treating an ordinary model response as independently verified.
+- [NEAR Intents overview](https://docs.agentsonintents.com/getting-started/what-are-intents) — outcome-based cross-chain execution with solver quotes and on-chain verification.
+- [NEAR Intents 1Click API](https://docs.agentsonintents.com/integration/distribution-channels/1click-api/about-1click-api) — quote, deposit, and status-tracking integration path for swaps.
+- [NEAR Intents SDK](https://docs.agentsonintents.com/integration/devkit/intents-sdk) — low-level intent execution and withdrawal capabilities; check the current feature-status table before relying on SDK methods.
+- [NEAR Agent API quickstart](https://docs.agentsonintents.com/integration/agent-api/quickstart/introduction) — policy-bound agent accounts, owner signatures, grants, funding, and agent actions. The current documentation describes this as an experimental mainnet-only beta; it uses real funds and has no testnet environment.
+- [NEAR Chain Signatures](https://github.com/near/mpc) — threshold/MPC signing architecture and signer contracts. Alesxras has no Chain Signatures integration today.
+- [Official NEAR Hackathon](https://nearhackathon.com/) — track descriptions, build dates, and submission instructions.
+
+### What this means for Alesxras
+
+The closest fit is **Autonomous Business**, but the current build demonstrates the procurement and AI-assistance side more strongly than the NEAR payment side. Wallet Selector integration is not equivalent to NEAR Intents or Chain Signatures integration.
+
+The most practical NEAR-specific upgrade path is:
+
+1. **NEAR AI Cloud:** the API is OpenAI-compatible, so a provider adapter can be added without redesigning the agent workflow. Keep Gemini as a fallback if desired. Add attestation/response verification if the product claims confidential or verifiable inference.
+2. **NEAR Intents:** use a dry quote/preview first, then implement the complete deposit and status lifecycle only after the user explicitly authorizes it. The current Agent API documentation is mainnet-only and warns that real assets may be lost; do not rush a live-funds integration for the demo.
+3. **Chain Signatures:** consider this only if Alesxras needs an agent-controlled derived key or cross-chain signing. It is not a prerequisite for showing procurement evaluation, and it must be paired with a tightly scoped policy and human authorization model.
+4. **Testnet payment proof:** independently of the above, finish a genuine testnet transaction path and verify it against NEAR RPC before claiming that Alesxras executes payments.
+
+Do not add all three integrations merely to list more NEAR technologies. A tested, narrowly scoped integration is stronger than three superficial references.
