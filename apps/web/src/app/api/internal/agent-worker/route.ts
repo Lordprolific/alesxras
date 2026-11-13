@@ -45,7 +45,7 @@ async function runEvaluation(url: string, key: string, geminiKey: string, run: A
   const procurement = rows[0];
   if (!procurement) throw new Error("The procurement record is no longer available.");
 
-  const model = process.env.AGENT_MODEL || "gemini-2.5-flash";
+  const model = process.env.AGENT_MODEL || "gemini-3.8-flash";
   const aiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent?key=" + encodeURIComponent(geminiKey), {
     method: "POST",
     signal: AbortSignal.timeout(45_000),
