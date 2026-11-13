@@ -190,3 +190,143 @@
   .app-shell .nav-item { color: rgb(255 255 255 / 80%); }
   .app-shell .nav-item.active { color: var(--workspace-plum); }
 }
+
+
+/* User-owned profile and first-login onboarding. */
+.app-shell .profile-sidebar-button {
+  display:flex; width:100%; align-items:center; gap:11px; padding:13px 0 0;
+  border:0; border-top:1px solid rgb(252 228 237 / 17%); background:transparent;
+  color:inherit; text-align:left; cursor:pointer;
+}
+.app-shell .profile-sidebar-button .profile-avatar,
+.app-shell .profile-trigger-avatar {
+  display:grid; flex:0 0 36px; width:36px; height:36px; place-items:center;
+  border:1px solid rgb(247 168 196 / 28%); border-radius:50%;
+  background:rgb(247 168 196 / 17%); color:#F7A8C4; font-size:18px;
+}
+.app-shell .profile-trigger {
+  display:flex; align-items:center; gap:9px; padding:4px 10px 4px 4px;
+  border:1px solid #eee4e9; border-radius:999px; background:#fff; color:#51434c;
+  cursor:pointer; font:inherit; font-size:11px;
+}
+.app-shell .profile-trigger-avatar { width:29px; height:29px; flex-basis:29px; background:#fce4ed; color:#81536a; }
+.app-shell .topbar-right { display:flex; align-items:center; gap:14px; }
+.profile-dialog-backdrop {
+  position:fixed; z-index:1000; inset:0; display:grid; place-items:center;
+  padding:20px; background:rgb(35 27 35 / 56%); backdrop-filter:blur(5px);
+}
+.profile-dialog {
+  width:min(480px,100%); max-height:min(92vh,760px); overflow:auto;
+  padding:30px; border:1px solid #eee4e9; border-radius:14px; background:#fff;
+  box-shadow:0 24px 80px rgb(30 20 30 / 22%);
+}
+.profile-dialog-heading h2 {
+  margin:7px 0 8px; color:#302832; font-family:Georgia,"Times New Roman",serif;
+  font-size:27px; font-weight:400; letter-spacing:-.5px;
+}
+.profile-dialog-heading > p:last-child { margin:0; color:#817780; font-size:12px; line-height:1.7; }
+.profile-form { display:grid; gap:22px; margin-top:24px; }
+.profile-name-field { display:grid; gap:8px; color:#554955; font-size:11px; font-weight:600; }
+.profile-name-field input {
+  width:100%; min-height:43px; padding:10px 12px; border:1px solid #e8dfe5;
+  border-radius:6px; background:#fff; color:#302832; font:inherit; font-size:13px;
+}
+.profile-name-field input:focus { outline:2px solid rgb(247 168 196 / 55%); border-color:#c98da8; }
+.profile-icon-field { min-width:0; margin:0; padding:0; border:0; }
+.profile-icon-field legend { margin-bottom:11px; color:#554955; font-size:11px; font-weight:600; }
+.profile-icon-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+.profile-icon-option {
+  display:grid; justify-items:center; gap:6px; padding:11px 5px 9px;
+  border:1px solid #eee4e9; border-radius:8px; background:#fff; cursor:pointer;
+}
+.profile-icon-option input { position:absolute; width:1px; height:1px; opacity:0; }
+.profile-icon-option > span { color:#9a5f7b; font-size:23px; line-height:1.2; }
+.profile-icon-option small { color:#817780; font-size:9px; }
+.profile-icon-option.selected { border-color:#c98da8; background:#fff5f8; box-shadow:0 0 0 2px rgb(247 168 196 / 22%); }
+.profile-icon-option:focus-within { outline:2px solid #c98da8; outline-offset:2px; }
+.profile-form-actions { display:flex; justify-content:flex-end; gap:9px; }
+.profile-form-error,.profile-load-error { margin:0; color:#a34262; font-size:11px; line-height:1.5; }
+.profile-load-error { position:fixed; z-index:20; right:20px; bottom:20px; max-width:360px; padding:12px 15px; border:1px solid #f0cbd8; border-radius:8px; background:#fff; }
+@media(max-width:760px) {
+  .app-shell .profile-trigger { font-size:0; padding:4px; }
+  .app-shell .profile-trigger-avatar { font-size:17px; }
+  .profile-dialog { padding:23px 19px; }
+}
+@media(prefers-reduced-motion:reduce) { .profile-dialog-backdrop { backdrop-filter:none; } }
+
+
+/* Agent operations — aligned with the approved native workspace palette. */
+.app-shell .agent-command-panel { margin:28px 0; padding:24px; }
+.app-shell .agent-foundation-tag { align-self:flex-start; padding:7px 10px; border:1px solid #f0dce5; border-radius:999px; background:#fff7fa; color:#8b5d73; font-size:10px; white-space:nowrap; }
+.app-shell .agent-role-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-top:22px; }
+.app-shell .agent-role-card { min-width:0; padding:15px 13px; border:1px solid #eee4e9; border-radius:8px; background:#fdf9fb; }
+.app-shell .agent-role-index { color:#b27b94; font-size:10px; letter-spacing:.12em; }
+.app-shell .agent-role-card h3 { margin:12px 0 7px; color:#302832; font-size:13px; font-weight:600; }
+.app-shell .agent-role-card p { min-height:66px; margin:0; color:#817780; font-size:10px; line-height:1.65; }
+.app-shell .agent-role-card > span:last-child { display:inline-block; margin-top:12px; color:#9a5f7b; font-size:9px; }
+.app-shell .agent-workbench { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,1.1fr); gap:28px; margin-top:24px; padding:20px; border:1px solid #f0e1e9; border-radius:9px; background:#fcf5f8; }
+.app-shell .agent-workbench-copy h3 { margin:5px 0 8px; color:#302832; font-size:17px; font-weight:500; }
+.app-shell .agent-workbench-copy > p:last-child { max-width:420px; margin:0; color:#817780; font-size:11px; line-height:1.7; }
+.app-shell .agent-task-form { display:grid; grid-template-columns:1fr 1fr; align-items:end; gap:12px; }
+.app-shell .agent-task-form label { display:grid; gap:7px; color:#554955; font-size:10px; font-weight:600; }
+.app-shell .agent-task-form select { width:100%; min-height:39px; padding:8px; border:1px solid #e8dfe5; border-radius:5px; background:#fff; color:#51434c; font:inherit; font-size:11px; }
+.app-shell .agent-task-form button { grid-column:1/-1; justify-self:start; min-height:38px; }
+.app-shell .agent-runs-heading { display:flex; align-items:center; justify-content:space-between; margin-top:24px; }
+.app-shell .agent-runs-heading h3 { margin:0; color:#302832; font-size:13px; font-weight:600; }
+.app-shell .agent-runs-heading p { margin:5px 0 0; color:#817780; font-size:10px; }
+.app-shell .agent-run-list { margin-top:10px; border:1px solid #eee4e9; border-radius:7px; overflow:hidden; }
+.app-shell .agent-run-row { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 14px; border-bottom:1px solid #f1eaf0; background:#fff; }
+.app-shell .agent-run-row:last-child { border-bottom:0; }
+.app-shell .agent-run-row > div { display:grid; gap:4px; }
+.app-shell .agent-run-row strong { color:#302832; font-size:11px; text-transform:capitalize; }
+.app-shell .agent-run-row > div span { color:#817780; font-size:9px; }
+.app-shell .agent-run-status { padding:5px 8px; border-radius:999px; background:#f5edf1; color:#786878; font-size:9px; text-transform:capitalize; }
+.app-shell .agent-run-status.queued { background:#fff2df; color:#926b34; }
+.app-shell .agent-run-status.running { background:#fce4ed; color:#89536d; }
+.app-shell .agent-run-status.succeeded { background:#eaf5ed; color:#477653; }
+.app-shell .agent-run-status.failed { background:#fbe9e9; color:#a04d4d; }
+.app-shell .agent-feedback { margin:12px 0 0; font-size:10px; line-height:1.6; }
+.app-shell .agent-feedback.success { color:#477653; }
+.app-shell .agent-feedback.error { color:#a34262; }
+.app-shell .agent-safety-note { margin:13px 0 0; padding-top:12px; border-top:1px solid #f0e6ec; color:#817780; font-size:10px; line-height:1.6; }
+@media(max-width:1050px) { .app-shell .agent-role-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:760px) { .app-shell .agent-command-panel { padding:17px; } .app-shell .agent-role-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .app-shell .agent-workbench { grid-template-columns:1fr; padding:15px; } .app-shell .agent-task-form { grid-template-columns:1fr; } .app-shell .agent-task-form button { grid-column:auto; } }
+
+/* Public supplier marketplace — aligned with the approved workspace palette. */
+.marketplace-panel { margin:28px 0; padding:24px; border:1px solid #ede5ea; border-radius:10px; background:#fff; }
+.marketplace-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; }
+.marketplace-heading h2 { margin:4px 0 7px; color:#302832; font-size:20px; font-weight:500; }
+.marketplace-heading p:last-child { margin:0; color:#817780; font-size:11px; line-height:1.6; }
+.marketplace-grid { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(230px,.8fr); gap:18px; margin-top:20px; align-items:start; }
+.marketplace-opportunities { display:grid; gap:12px; min-width:0; }
+.marketplace-request,.marketplace-my-bids { min-width:0; padding:17px; border:1px solid #eee4e9; border-radius:8px; background:#fdfbfc; }
+.marketplace-request-top,.marketplace-request-meta { display:flex; justify-content:space-between; gap:12px; color:#9a5f7b; font-size:9px; }
+.marketplace-request h3 { margin:12px 0 7px; color:#302832; font-size:14px; font-weight:600; }
+.marketplace-request > p { margin:0; color:#817780; font-size:11px; line-height:1.7; white-space:pre-wrap; }
+.marketplace-request-meta { margin-top:12px; color:#746772; }
+.marketplace-request ul { margin:10px 0 0; padding-left:17px; color:#746772; font-size:10px; line-height:1.7; }
+.marketplace-bid-form { display:grid; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid #eee4e9; }
+.marketplace-bid-form label { display:grid; gap:6px; color:#554955; font-size:10px; font-weight:600; }
+.marketplace-bid-form input,.marketplace-bid-form textarea { width:100%; padding:9px 10px; border:1px solid #e8dfe5; border-radius:5px; background:#fff; color:#302832; font:inherit; font-size:11px; }
+.marketplace-bid-form button { justify-self:start; min-height:36px; }
+.marketplace-my-bids { background:#fcf5f8; }
+.marketplace-my-bids > div { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.marketplace-my-bids h3 { margin:0; color:#302832; font-size:13px; }
+.marketplace-my-bids > div > span { color:#9a5f7b; font-size:9px; }
+.marketplace-own-bid { display:grid; gap:5px; padding:12px 0; border-bottom:1px solid #eee4e9; }
+.marketplace-own-bid:last-child { border-bottom:0; }
+.marketplace-own-bid strong { color:#302832; font-size:10px; }
+.marketplace-own-bid span,.marketplace-own-bid small { color:#817780; font-size:9px; }
+.marketplace-message { margin:12px 0 0; font-size:10px; line-height:1.6; }
+.marketplace-message.success,.marketplace-submitted { color:#477653; }
+.marketplace-message.error { color:#a34262; }
+.marketplace-submitted { margin-top:14px !important; font-size:10px !important; }
+.agent-run-entry { border-bottom:1px solid #f1eaf0; background:#fff; }
+.agent-run-entry:last-child { border-bottom:0; }
+.agent-run-entry .agent-run-row { border-bottom:0; }
+.agent-run-result { padding:0 14px 13px; color:#746772; font-size:10px; }
+.agent-run-result summary { cursor:pointer; color:#9a5f7b; }
+.agent-run-result pre { max-height:340px; overflow:auto; margin:9px 0 0; padding:12px; border-radius:6px; background:#fcf8fa; color:#51434c; font:10px/1.6 ui-monospace,monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+.agent-run-error { margin:0; padding:0 14px 12px; color:#a34262; font-size:10px; line-height:1.5; }
+@media(max-width:900px) { .marketplace-grid { grid-template-columns:1fr; } }
+@media(max-width:760px) { .marketplace-panel { padding:16px; } .marketplace-heading { align-items:center; } .marketplace-request-top,.marketplace-request-meta { flex-wrap:wrap; } }
