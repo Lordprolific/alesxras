@@ -72,6 +72,57 @@ function shortId(id: string) {
   return `PR-${id.slice(0, 8).toUpperCase()}`;
 }
 
+
+type EvaluationReportData = {
+  summary?: string;
+  nextSteps?: string[];
+  riskFlags?: Array<{ severity?: string; explanation?: string }>;
+  evaluationCriteria?: Array<{ criterion?: string; whyItMatters?: string }>;
+  missingInformation?: string[];
+};
+
+function EvaluationReport({ result }: { result: unknown }) {
+  const report = (result && typeof result === "object" && "result" in result
+    ? (result as { result?: unknown }).result
+    : result) as EvaluationReportData | null;
+  if (!report || typeof report !== "object") {
+    return <details className="agent-run-result"><summary>View task details</summary><pre>{JSON.stringify(result, null, 2)}</pre></details>;
+  }
+  const risks = Array.isArray(report.riskFlags) ? report.riskFlags : [];
+  const steps = Array.isArray(report.nextSteps) ? report.nextSteps : [];
+  const criteria = Array.isArray(report.evaluationCriteria) ? report.evaluationCriteria : [];
+  const missing = Array.isArray(report.missingInformation) ? report.missingInformation : [];
+  const severityLabel = (value?: string) => value?.toLowerCase() === "high" ? "High priority" : value?.toLowerCase() === "medium" ? "Needs attention" : value?.toLowerCase() === "low" ? "Low priority" : "Review";
+  return (
+    <details className="agent-run-result evaluation-report" open>
+      <summary>View evaluation report</summary>
+      <div className="evaluation-report-body">
+        <section className="evaluation-summary">
+          <span className="evaluation-section-label">THE OVERVIEW</span>
+          <h4>What the evaluation found</h4>
+          <p>{report.summary || "The evaluation is complete. Review the findings below."}</p>
+        </section>
+        {risks.length > 0 && <section className="evaluation-section">
+          <div className="evaluation-section-heading"><div><span className="evaluation-section-label">ATTENTION AREAS</span><h4>Risks to address</h4></div><span className="evaluation-count">{risks.length} identified</span></div>
+          <div className="evaluation-risk-list">{risks.map((risk, index) => <article className={`evaluation-risk-card severity-${(risk.severity || "review").toLowerCase()}`} key={index}><span className="evaluation-risk-severity">{severityLabel(risk.severity)}</span><p>{risk.explanation || "Further review is recommended."}</p></article>)}</div>
+        </section>}
+        {missing.length > 0 && <section className="evaluation-section">
+          <span className="evaluation-section-label">INFORMATION NEEDED</span><h4>What’s still missing</h4>
+          <ul className="evaluation-checklist">{missing.map((item, index) => <li key={index}><span aria-hidden="true">○</span>{item}</li>)}</ul>
+        </section>}
+        {steps.length > 0 && <section className="evaluation-section">
+          <span className="evaluation-section-label">RECOMMENDED ACTIONS</span><h4>What to do next</h4>
+          <ol className="evaluation-next-steps">{steps.map((step, index) => <li key={index}><span>{String(index + 1).padStart(2, "0")}</span><p>{step}</p></li>)}</ol>
+        </section>}
+        {criteria.length > 0 && <section className="evaluation-section">
+          <span className="evaluation-section-label">HOW PROPOSALS CAN BE ASSESSED</span><h4>Suggested evaluation criteria</h4>
+          <div className="evaluation-criteria-list">{criteria.map((item, index) => <article key={index}><strong>{item.criterion || `Criterion ${index + 1}`}</strong><p>{item.whyItMatters || "Use this criterion when reviewing supplier proposals."}</p></article>)}</div>
+        </section>}
+      </div>
+    </details>
+  );
+}
+
 export function Dashboard() {
   const [data, setData] = useState<WorkspaceData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -315,7 +366,7 @@ export function Dashboard() {
             {agentMessage && <p className="agent-feedback success" role="status">{agentMessage}</p>}
             {agentError && <p className="agent-feedback error" role="alert">{agentError}</p>}
             <div className="agent-runs-heading"><div><h3>Recent agent activity</h3><p>Persisted task records for this workspace</p></div><button className="text-link refresh-button" type="button" onClick={() => void loadAgentRuns()} disabled={agentRunsLoading}>Refresh</button></div>
-            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <article className="agent-run-entry" key={run.id}><div className="agent-run-row"><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>{run.result != null && <details className="agent-run-result"><summary>View agent report</summary><pre>{JSON.stringify(run.result, null, 2)}</pre></details>}{run.error_message && <p className="agent-run-error">{run.error_message}</p>}</article>)}</div>
+            <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <article className="agent-run-entry" key={run.id}><div className="agent-run-row"><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>{run.result != null && <EvaluationReport result={run.result} />}{run.error_message && <p className="agent-run-error">{run.error_message}</p>}</article>)}</div>
             <p className="agent-safety-note">Evaluation and negotiation preparation use Google Gemini. Transaction verification checks recorded hashes against NEAR RPC. Sealed supplier proposals remain encrypted; negotiation preparation uses only permitted brief and bid metadata. Agents cannot approve spending, sign transactions or submit payments.</p>
           </section>
 
