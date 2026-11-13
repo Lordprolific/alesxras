@@ -30,6 +30,8 @@ type AgentRun = {
   created_at: string;
   result?: unknown;
   error_message?: string | null;
+  provider?: string | null;
+  model?: string | null;
 };
 
 type UserProfile = {
@@ -122,9 +124,15 @@ export function Dashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ kind: agentRunKind, procurementId: agentRequestId }),
       });
-      const result = await response.json() as { error?: string; run?: AgentRun };
+      const result = await response.json() as { error?: string; run?: AgentRun; worker?: { status?: string; provider?: string; model?: string } };
       if (!response.ok || !result.run) throw new Error(result.error || "The agent task could not be recorded.");
-      setAgentMessage("Evaluation queued. The report will appear here once the AI Gateway key is configured for this preview.");
+      if (result.run.status === "succeeded") {
+        setAgentMessage(`Evaluation completed with ${result.run.provider || result.worker?.provider || "Gemini"}. Open the report below to review the findings.`);
+      } else if (result.run.status === "failed") {
+        setAgentError(result.run.error_message || "The evaluation failed. Review the run details below.");
+      } else {
+        setAgentMessage("The task was recorded. Refresh activity to check its latest status.");
+      }
       await loadAgentRuns();
     } catch (cause) {
       setAgentError(cause instanceof Error ? cause.message : "The agent task could not be recorded.");
@@ -297,18 +305,18 @@ export function Dashboard() {
               <article className="agent-role-card"><span className="agent-role-index">05</span><h3>Verification agent</h3><p>Checks execution evidence and transaction conditions before a human-authorized action.</p><span>Verification workflow</span></article>
             </div>
             <div className="agent-workbench">
-              <div className="agent-workbench-copy"><p className="eyebrow">Task orchestration</p><h3>Prepare an agent task</h3><p>Choose the workflow and procurement record. This preview records a bounded task request; it does not call an AI provider, submit a transaction or execute an agent.</p></div>
+              <div className="agent-workbench-copy"><p className="eyebrow">Task orchestration</p><h3>Prepare an agent task</h3><p>Run a live Gemini evaluation against the selected procurement brief. The agent returns structured findings for human review; it cannot approve spending or submit a payment.</p></div>
               <form className="agent-task-form" onSubmit={queueAgentRun}>
                 <label>Agent workflow<select value={agentRunKind} onChange={(event) => setAgentRunKind(event.target.value as AgentRun["kind"])}><option value="evaluate_procurement">Evaluate procurement</option><option value="negotiate_bid" disabled>Prepare negotiation · coming later</option><option value="verify_transaction" disabled>Verify transaction · coming later</option></select></label>
                 <label>Procurement request<select value={agentRequestId} onChange={(event) => setAgentRequestId(event.target.value)} required><option value="">Choose a request</option>{(data?.requests ?? []).map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</select></label>
-                <button className="create-button" type="submit" disabled={agentQueueing || !agentRequestId || !data?.requests.length}>{agentQueueing ? "Recording task…" : "Record agent task"}</button>
+                <button className="create-button" type="submit" disabled={agentQueueing || !agentRequestId || !data?.requests.length}>{agentQueueing ? "Running evaluation…" : "Run evaluation"}</button>
               </form>
             </div>
             {agentMessage && <p className="agent-feedback success" role="status">{agentMessage}</p>}
             {agentError && <p className="agent-feedback error" role="alert">{agentError}</p>}
             <div className="agent-runs-heading"><div><h3>Recent agent activity</h3><p>Persisted task records for this workspace</p></div><button className="text-link refresh-button" type="button" onClick={() => void loadAgentRuns()} disabled={agentRunsLoading}>Refresh</button></div>
             <div className="agent-run-list">{agentRunsLoading ? <p className="empty-state">Loading agent activity…</p> : agentRuns.length === 0 ? <p className="empty-state">No agent tasks have been recorded yet.</p> : agentRuns.map((run) => <article className="agent-run-entry" key={run.id}><div className="agent-run-row"><div><strong>{run.kind.replaceAll("_", " ")}</strong><span>{run.procurement_id ? shortId(run.procurement_id) : "Workspace task"} · {new Date(run.created_at).toLocaleString()}</span></div><span className={"agent-run-status " + run.status}>{run.status}</span></div>{run.result != null && <details className="agent-run-result"><summary>View agent report</summary><pre>{JSON.stringify(run.result, null, 2)}</pre></details>}{run.error_message && <p className="agent-run-error">{run.error_message}</p>}</article>)}</div>
-            <p className="agent-safety-note">The evaluation agent can prepare evidence-based reports when the AI Gateway key is configured. Negotiation and transaction verification remain disabled until secure bid review and NEAR transaction evidence are connected. Human approval is always required.</p>
+            <p className="agent-safety-note">Live workflow: procurement evaluation via Google Gemini. Negotiation and transaction verification are not enabled in this release. Agents cannot approve spending, sign transactions or submit payments; human approval remains mandatory.</p>
           </section>
 
           {showCreate && <section className="activity-panel create-request-panel" id="create-request">
