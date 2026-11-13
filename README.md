@@ -21,15 +21,6 @@ Production: https://thealesxras.vercel.app/
 
 The application includes NEAR Wallet Selector dependencies for wallet connection/account identity. The repository also contains a NEAR gateway interface, transfer types, a testnet-only network guard, and a unit test confirming that the guard rejects mainnet.
 
-**The following are not implemented as live integrations in this release:**
-
-- A concrete NEAR transfer signer or deployed procurement smart contract.
-- An end-to-end testnet payment submission and settlement flow.
-- NEAR Intents quote, deposit, signed-intent, execution, or settlement integration.
-- NEAR Chain Signatures / MPC signer integration.
-- NEAR AI Cloud integration. Procurement agents currently call Google Gemini directly through its API.
-- Autonomous agent treasury operations or autonomous spending.
-
 The transaction verification route is separate from transaction execution. It requires a valid approval record and a real recorded transaction to produce meaningful verification. Treat the payment path as incomplete until approval safeguards and a real testnet end-to-end flow have been implemented and tested.
 
 ## Architecture
